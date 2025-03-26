@@ -1403,8 +1403,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   value_inputControl: {x: 0, y: 0}
-  "\u901F\u5EA6": 1
-  "\u8DF3\u8DC3\u9AD8\u5EA6": 1
+  "\u901F\u5EA6": 200
+  "\u8DF3\u8DC3\u9AD8\u5EA6": 3
   capsuleCollider: {fileID: 1390444224}
   rgbody: {fileID: 1390444223}
 --- !u!114 &1390444226
@@ -1436,8 +1436,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1390444225}
         m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
-        m_MethodName: Move
-        m_Mode: 1
+        m_MethodName: CanMove
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
