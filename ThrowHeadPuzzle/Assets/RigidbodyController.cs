@@ -19,6 +19,8 @@ public class RigidbodyController : MonoBehaviour
             // 可以在这里设置一些默认属性
             rb.gravityScale = 4f;  // 默认重力缩放
             rb.mass = 1f;         // 默认质量
+            // 冻结Z轴旋转
+            rb.freezeRotation = true;
             Debug.Log("已添加Rigidbody2D组件");
         }
         else

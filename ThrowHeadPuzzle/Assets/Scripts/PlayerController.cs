@@ -65,7 +65,24 @@ public class PlayerController : MonoBehaviour
 
         UpdateState();
 
-        CheckAndChangeDirection();
+        //当人没有头时不改变朝向
+        if (curstate == ThrowState.HeadOnBody || curstate == ThrowState.OtherHead || curstate == ThrowState.ThrowAnimation)
+            CheckAndChangeDirection();
+        else
+        {
+            int faceDirection;
+            if (rgbody.velocity.x > 0.6)
+            {
+                faceDirection = 1;
+                transform.localScale = new Vector3(faceDirection, 1, 1);
+            }
+
+            if (rgbody.velocity.x < -0.6)
+            {
+                faceDirection = -1;
+                transform.localScale = new Vector3(faceDirection, 1, 1);
+            }
+        }
     }
     void OnEnable()
     {
@@ -100,7 +117,6 @@ public class PlayerController : MonoBehaviour
         {
             rgbody.velocity = new Vector2(value_inputControl.x * 速度 * Time.deltaTime, rgbody.velocity.y);
         }
-
     }
 
     #region 状态机
@@ -183,7 +199,7 @@ public class PlayerController : MonoBehaviour
                 HeadAddrgbody();
                 DetachHeads();
                 //抛出
-                Vector2 aim = GetVectorAim();
+                Vector2 aim = new Vector2(GetVectorAim().x, 0).normalized;
                 rbController.Throw(aim);
                 rbController = null;
                 _currentTrigger = null;
@@ -201,7 +217,7 @@ public class PlayerController : MonoBehaviour
             //执行不同状态的Update，如：
             case ThrowState.HeadOnBody:
                 //如果按下E，就投掷
-                if (eKeyAction.triggered || mouseAction.triggered)//按下E或者点击
+                if (eKeyAction.triggered)//按下E或者点击 || mouseAction.triggered
                 {
                     StartState(ThrowState.ThrowAnimation);
                 }
@@ -220,7 +236,7 @@ public class PlayerController : MonoBehaviour
                     SpriteRenderer signRenderer = Sign.GetComponent<SpriteRenderer>();
                     signRenderer.enabled = false;  //取消激活 SpriteRenderer
                 }
-                if (eKeyAction.triggered || mouseAction.triggered)//按下E或者点击
+                if (eKeyAction.triggered)//按下E或者点击 || mouseAction.triggered
                 {
                     //满足 检测到可拾取的头 collider触发器
                     if (CanPickUp())
@@ -231,7 +247,7 @@ public class PlayerController : MonoBehaviour
                 break;
             case ThrowState.OtherHead:
                 //如果按下E，就投掷
-                if (eKeyAction.triggered || mouseAction.triggered)//按下E或者点击
+                if (eKeyAction.triggered)//按下E或者点击 || mouseAction.triggered
                 {
                     StartState(ThrowState.ThrowAnimation);
                 }
