@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class RigidbodyController : MonoBehaviour
 {
+    public bool isMyHead;
+
     /// <summary>
     /// 为当前游戏对象添加Rigidbody2D组件
     /// </summary>

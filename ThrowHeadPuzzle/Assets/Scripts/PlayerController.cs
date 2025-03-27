@@ -11,6 +11,7 @@ using System.Linq; // 添加LINQ支持
 
 public class PlayerController : MonoBehaviour
 {
+    #region 公共变量
     public InputControl inputControl;//输入
     private InputAction mousePositionAction;
     private InputAction mouseAction;
@@ -28,7 +29,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private bool isKeyboard;
     public int isMoveForward;//表示人物是正走/倒走状态，1代表正走，-1代表倒走
     public RigidbodyController rbController;
-
+    #endregion
 
     private void Awake()
     {
@@ -58,7 +59,13 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
+    void Update()
+    {
 
+        UpdateState();
+
+        CheckAndChangeDirection();
+    }
     void OnEnable()
     {
         InputSystem.onActionChange += OnInputDiviceChange;
@@ -131,8 +138,8 @@ public class PlayerController : MonoBehaviour
 
                 break;
             case ThrowState.PickupAnimation:
-                //
-
+                //把头拼上
+                AttachHeads();
                 break;
             case ThrowState.ThrowAnimation:
                 //HeadOnBody=>ThrowAnimation
@@ -158,6 +165,7 @@ public class PlayerController : MonoBehaviour
                 break;
 
             case ThrowState.NoHead:
+                //PickUp(最近的头);
                 //
                 break;
             case ThrowState.OtherHead:
@@ -165,14 +173,16 @@ public class PlayerController : MonoBehaviour
 
                 break;
             case ThrowState.PickupAnimation:
-                //
 
                 break;
             case ThrowState.ThrowAnimation:
-                //分离头
+                //分离头 增加刚体组件
                 HeadAddrgbody();
                 DetachHeads();
-                rbController.Throw(GetVectorAim());               
+                //抛出
+                rbController.Throw(GetVectorAim());
+                rbController = null;
+                _currentTrigger = null;
                 break;
         }
     }
@@ -185,7 +195,7 @@ public class PlayerController : MonoBehaviour
             //执行不同状态的Update，如：
             case ThrowState.HeadOnBody:
                 //如果按下E，就投掷
-                if (eKeyAction.triggered || mouseAction.triggered)//按下E
+                if (eKeyAction.triggered || mouseAction.triggered)//按下E或者点击
                 {
                     StartState(ThrowState.ThrowAnimation);
                 }
@@ -193,22 +203,30 @@ public class PlayerController : MonoBehaviour
 
             case ThrowState.NoHead:
                 //如果按下E，并且范围里有可以捡起的头，就捡起最近的
-                if (eKeyAction.triggered || mouseAction.triggered)//按下E
+                if (CanPickUp())
                 {
-                    //PickUp(最近的头);
-                    StartState(ThrowState.PickupAnimation);
-                    //这里的pickup行为可以在这里执行，也可以在pickupAnimation的开始执行
+                    Debug.Log("可以拾取这个Head！");
+                }
+                if (eKeyAction.triggered || mouseAction.triggered)//按下E或者点击
+                {
+                    //满足 检测到可拾取的头 collider触发器
+                    if (CanPickUp())
+                    {
+                        StartState(ThrowState.PickupAnimation);
+                    }
                 }
                 break;
             case ThrowState.OtherHead:
                 //如果按下E，就投掷
-                if (eKeyAction.triggered || mouseAction.triggered)//按下E
+                if (eKeyAction.triggered || mouseAction.triggered)//按下E或者点击
                 {
                     StartState(ThrowState.ThrowAnimation);
                 }
                 break;
             case ThrowState.PickupAnimation:
-
+                //结束拾取，检查是否是自己的头
+                if (CheckMyHead()) StartState(ThrowState.HeadOnBody);
+                else StartState(ThrowState.OtherHead);
                 break;
             case ThrowState.ThrowAnimation:
                 //进入nohead状态
@@ -219,14 +237,7 @@ public class PlayerController : MonoBehaviour
 
     #endregion
 
-    void Update()
-    {
-
-        UpdateState();
-
-        CheckAndChangeDirection();
-    }
-
+    #region 移动
     public void Jump()
     {
         if (physicCheck.isGround)
@@ -237,6 +248,7 @@ public class PlayerController : MonoBehaviour
     {
         value_inputControl = callbackContext.ReadValue<Vector2>();
     }
+    #endregion
 
     #region 人物朝向
     /// <summary>
@@ -323,7 +335,7 @@ public class PlayerController : MonoBehaviour
     }
     #endregion
 
-
+    #region 分离头部
     /// <summary>
     /// 简洁分离所有 "Head" Tag 的子物体
     /// </summary>
@@ -371,4 +383,58 @@ public class PlayerController : MonoBehaviour
         // 如果没有找到符合条件的子物体
         Debug.LogWarning($"没有找到tag为'Head'的子物体");
     }
+    #endregion
+
+    #region 捡起头部
+    [SerializeField] private Collider2D _currentTrigger; // 当前所在的触发器
+
+    /// <summary>
+    /// 检测周围物体是否能拾取（也就是玩家是否位于"Head"触发器内）
+    /// </summary>
+    /// <returns></returns>
+    public bool CanPickUp()
+    {
+        return _currentTrigger != null && _currentTrigger.CompareTag("Head");
+    }
+
+    public bool CheckMyHead()
+    {
+        // 获取触发器所在物体的 RigidbodyController 组件
+        RigidbodyController controller = _currentTrigger.GetComponentInParent<RigidbodyController>();
+
+        return controller != null && controller.isMyHead;
+    }
+
+    // 触发器进入时记录
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        if (other.isTrigger) // 确保只检测触发器（非物理碰撞体）
+        {
+            _currentTrigger = other;
+        }
+    }
+
+    // 触发器退出时清空记录
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other == _currentTrigger)
+        {
+            _currentTrigger = null;
+        }
+    }
+
+    [SerializeField] Vector3 头偏移量;
+    public void AttachHeads()
+    {
+        RigidbodyController controller = _currentTrigger.GetComponentInParent<RigidbodyController>();
+        //移除刚体
+        controller.DeAddRGbody();
+        //与身体组合，变成子对象
+        controller.transform.SetParent(transform);
+        //设置正确的位置
+        controller.transform.localPosition = 头偏移量;
+        controller.transform.eulerAngles = new Vector3(0, 0, 0);
+        controller.transform.localScale = new Vector3(1, 1, 1);
+    }
+    #endregion
 }
