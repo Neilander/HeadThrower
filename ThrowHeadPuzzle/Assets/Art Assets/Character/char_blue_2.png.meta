@@ -48,7 +48,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 20
+  spritePixelsToUnits: 16
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -113,12 +113,12 @@ TextureImporter:
       name: char_blue_2_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 336
-        width: 56
-        height: 56
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        x: 19
+        y: 356
+        width: 16
+        height: 16
+      alignment: 9
+      pivot: {x: 0.50738525, y: 0.33235168}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
