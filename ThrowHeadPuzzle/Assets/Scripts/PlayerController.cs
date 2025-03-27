@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
 {
     public InputControl inputControl;//输入
     private InputAction mousePositionAction;
+    private InputAction mouseAction;
     private InputAction eKeyAction;
     [SerializeField] private Vector2 value_inputControl;
     [SerializeField] private Vector2 aimValue_inputControl;
@@ -23,8 +24,10 @@ public class PlayerController : MonoBehaviour
     [Header("物理")]
     public CapsuleCollider2D capsuleCollider;
     public Rigidbody2D rgbody;
+    public PhysicCheck physicCheck;
     [SerializeField] private bool isKeyboard;
     public int isMoveForward;//表示人物是正走/倒走状态，1代表正走，-1代表倒走
+    public RigidbodyController rbController;
 
 
     private void Awake()
@@ -34,10 +37,26 @@ public class PlayerController : MonoBehaviour
         capsuleCollider = GetComponent<CapsuleCollider2D>();
         // 创建一个新的输入动作来获取鼠标位置
         mousePositionAction = new InputAction(binding: "<Mouse>/position");
+        mouseAction = new InputAction(
+            name: "LeftClick",
+            type: InputActionType.Button,
+            binding: "<Mouse>/leftButton"
+        //interactions: "press(duration=0.1)"  // 添加点击持续阈值
+        );
         eKeyAction = new InputAction("EKeyPress", binding: "<Keyboard>/e");
         eKeyAction.Enable();
+        mouseAction.Enable();
         mousePositionAction.Enable();
         //inputControl.Player.Jump.started += Jump();//旧的方法
+        foreach (Transform child in transform)
+        {
+            // 检查子物体的tag是否为"Head"
+            if (child.CompareTag("Head"))
+            {
+                // 获取子物体上的RigidbodyController组件
+                rbController = child.GetComponent<RigidbodyController>();
+            }
+        }
     }
 
     void OnEnable()
@@ -87,6 +106,7 @@ public class PlayerController : MonoBehaviour
         PickupAnimation
     }
 
+    [Header("目前状态")]
     public ThrowState curstate = ThrowState.HeadOnBody;
 
     //外部可以调用的切换状态方法
@@ -103,7 +123,7 @@ public class PlayerController : MonoBehaviour
 
             case ThrowState.NoHead:
                 //ThrowAnimation=>NoHead
-                Debug.Log("头.已经被投出();");
+                //Debug.Log("头.已经被投出();");
 
                 break;
             case ThrowState.OtherHead:
@@ -116,7 +136,7 @@ public class PlayerController : MonoBehaviour
                 break;
             case ThrowState.ThrowAnimation:
                 //HeadOnBody=>ThrowAnimation
-                //
+                //播放瞄准动画
 
                 break;
         }
@@ -134,7 +154,7 @@ public class PlayerController : MonoBehaviour
                 //HeadOnBody=>ThrowAnimation
                 //TODO: 播放投掷动画
                 //使用  head.投掷(); 找到目前身上的头，调用这个头组件中的 投掷()
-                Debug.Log("头.投出();");
+                //Debug.Log("头.投出();");
                 break;
 
             case ThrowState.NoHead:
@@ -149,8 +169,10 @@ public class PlayerController : MonoBehaviour
 
                 break;
             case ThrowState.ThrowAnimation:
-                //
-
+                //分离头
+                HeadAddrgbody();
+                DetachHeads();
+                rbController.Throw(GetVectorAim());               
                 break;
         }
     }
@@ -163,7 +185,7 @@ public class PlayerController : MonoBehaviour
             //执行不同状态的Update，如：
             case ThrowState.HeadOnBody:
                 //如果按下E，就投掷
-                if (eKeyAction.triggered)//按下E
+                if (eKeyAction.triggered || mouseAction.triggered)//按下E
                 {
                     StartState(ThrowState.ThrowAnimation);
                 }
@@ -171,7 +193,7 @@ public class PlayerController : MonoBehaviour
 
             case ThrowState.NoHead:
                 //如果按下E，并且范围里有可以捡起的头，就捡起最近的
-                if (eKeyAction.triggered)//按下E
+                if (eKeyAction.triggered || mouseAction.triggered)//按下E
                 {
                     //PickUp(最近的头);
                     StartState(ThrowState.PickupAnimation);
@@ -179,13 +201,18 @@ public class PlayerController : MonoBehaviour
                 }
                 break;
             case ThrowState.OtherHead:
-
+                //如果按下E，就投掷
+                if (eKeyAction.triggered || mouseAction.triggered)//按下E
+                {
+                    StartState(ThrowState.ThrowAnimation);
+                }
                 break;
             case ThrowState.PickupAnimation:
 
                 break;
             case ThrowState.ThrowAnimation:
-
+                //进入nohead状态
+                StartState(ThrowState.NoHead);
                 break;
         }
     }
@@ -202,8 +229,8 @@ public class PlayerController : MonoBehaviour
 
     public void Jump()
     {
-        rgbody.AddForce(transform.up * 跳跃高度, ForceMode2D.Impulse);
-
+        if (physicCheck.isGround)
+            rgbody.AddForce(transform.up * 跳跃高度, ForceMode2D.Impulse);
     }
 
     public void CanMove(InputAction.CallbackContext callbackContext)
@@ -261,7 +288,7 @@ public class PlayerController : MonoBehaviour
     public void CheckAndChangeDirection()
     {
         int faceDirection = (int)transform.localScale.x;
-        Debug.Log(rgbody.velocity.x * faceDirection);
+        //Debug.Log(rgbody.velocity.x * faceDirection);
         if (isKeyboard)//输入不为手柄时
         {
             faceDirection = FacetoMouse() > 0 ? 1 : -1;
@@ -271,18 +298,18 @@ public class PlayerController : MonoBehaviour
             {
                 //触发正走的animator
                 isMoveForward = 1;
-                Debug.Log("正走");
+                //Debug.Log("正走");
             }
             else if (rgbody.velocity.x * faceDirection < -0.01)
             {
                 //触发倒走的animator
                 isMoveForward = -1;
-                Debug.Log("倒走");
+                //Debug.Log("倒走");
             }
             else if (rgbody.velocity.x * faceDirection == 0)
             {
                 isMoveForward = 0;
-                Debug.Log("静止");
+                //Debug.Log("静止");
             }
         }
         else
@@ -297,7 +324,9 @@ public class PlayerController : MonoBehaviour
     #endregion
 
 
-    // 方法1：简洁分离所有 "Head" Tag 的子物体
+    /// <summary>
+    /// 简洁分离所有 "Head" Tag 的子物体
+    /// </summary>
     // 直接在原方法中写完整实现（放弃扩展方法）
     public void DetachHeads()
     {
@@ -307,5 +336,39 @@ public class PlayerController : MonoBehaviour
             if (child != transform && child.CompareTag("Head"))
                 child.SetParent(null);
         }
+    }
+
+    /// <summary>
+    /// 为分离的头部添加rigidbody2d
+    /// </summary>
+    public void HeadAddrgbody()
+    {
+        // 遍历所有子物体
+        foreach (Transform child in transform)
+        {
+            // 检查子物体的tag是否为"Head"
+            if (child.CompareTag("Head"))
+            {
+                // 获取子物体上的RigidbodyController组件
+                rbController = child.GetComponent<RigidbodyController>();
+
+                if (rbController != null)
+                {
+                    // 执行 AddRGbody()
+                    rbController.AddRGbody();
+                    Debug.Log($"在子物体 {child.name} 上成功添加了rgbody");
+                }
+                else
+                {
+                    Debug.LogWarning($"子物体 {child.name} 上没有找到RigidbodyController组件");
+                }
+
+                // 找到第一个符合条件的子物体后返回（如果只需要处理第一个）
+                return;
+            }
+        }
+
+        // 如果没有找到符合条件的子物体
+        Debug.LogWarning($"没有找到tag为'Head'的子物体");
     }
 }
