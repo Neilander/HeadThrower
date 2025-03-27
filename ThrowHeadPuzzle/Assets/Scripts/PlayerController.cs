@@ -29,6 +29,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private bool isKeyboard;
     public int isMoveForward;//表示人物是正走/倒走状态，1代表正走，-1代表倒走
     public RigidbodyController rbController;
+    [SerializeField] Transform Sign;
     #endregion
 
     private void Awake()
@@ -166,7 +167,9 @@ public class PlayerController : MonoBehaviour
 
             case ThrowState.NoHead:
                 //PickUp(最近的头);
-                //
+                //捡起头后取消显示提示
+                SpriteRenderer signRenderer = Sign.GetComponent<SpriteRenderer>();
+                signRenderer.enabled = false;  //取消激活 SpriteRenderer
                 break;
             case ThrowState.OtherHead:
                 //
@@ -180,9 +183,12 @@ public class PlayerController : MonoBehaviour
                 HeadAddrgbody();
                 DetachHeads();
                 //抛出
-                rbController.Throw(GetVectorAim());
+                Vector2 aim = GetVectorAim();
+                rbController.Throw(aim);
                 rbController = null;
                 _currentTrigger = null;
+                //反作用力函数
+                CounterForce(aim);
                 break;
         }
     }
@@ -205,7 +211,14 @@ public class PlayerController : MonoBehaviour
                 //如果按下E，并且范围里有可以捡起的头，就捡起最近的
                 if (CanPickUp())
                 {
-                    Debug.Log("可以拾取这个Head！");
+                    //Debug.Log("可以拾取这个Head！");
+                    SpriteRenderer signRenderer = Sign.GetComponent<SpriteRenderer>();
+                    signRenderer.enabled = true;  //激活 SpriteRenderer
+                }
+                else
+                {
+                    SpriteRenderer signRenderer = Sign.GetComponent<SpriteRenderer>();
+                    signRenderer.enabled = false;  //取消激活 SpriteRenderer
                 }
                 if (eKeyAction.triggered || mouseAction.triggered)//按下E或者点击
                 {
@@ -383,6 +396,19 @@ public class PlayerController : MonoBehaviour
         // 如果没有找到符合条件的子物体
         Debug.LogWarning($"没有找到tag为'Head'的子物体");
     }
+
+    [SerializeField] int 反作用力;
+
+    /// <summary>
+    /// 在扔出脑袋时对自己施加反作用力
+    /// </summary>
+    /// <exception cref="NotImplementedException"></exception>
+    private void CounterForce(Vector2 aim)
+    {
+        rgbody.velocity = new Vector2(0, 0);
+        rgbody.AddForce(-aim.normalized * 反作用力, ForceMode2D.Impulse);
+    }
+
     #endregion
 
     #region 捡起头部
