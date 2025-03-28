@@ -2342,6 +2342,8 @@ MonoBehaviour:
   isMoveForward: 0
   rbController: {fileID: 0}
   Sign: {fileID: 1775876082}
+  canMove: 1
+  "\u7A7A\u4E2D\u505C\u6B62\u64CD\u63A7\u7684\u65F6\u95F4": 0.3
   curstate: 0
   "\u53CD\u4F5C\u7528\u529B": 8
   _currentTrigger: {fileID: 0}

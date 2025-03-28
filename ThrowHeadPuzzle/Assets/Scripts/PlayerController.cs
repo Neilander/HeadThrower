@@ -111,9 +111,30 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public bool canMove = true;
+    public float 空中停止操控的时间;
+
+    /// <summary>
+    /// 用于在扔出脑袋后停止一段时间的输入
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator StopMoveInAir()
+    {
+        // 开始协程后将 canMove 设置为 false
+        canMove = false;
+
+        // 等待指定的时间
+        yield return new WaitForSeconds(空中停止操控的时间);
+
+        // 时间到后将 canMove 设置为 true
+        canMove = true;
+
+        // 协程执行完毕，自动停止
+    }
+
     private void FixedUpdate()
     {
-        if (value_inputControl.magnitude != 0)
+        if (value_inputControl.magnitude != 0 && canMove)
         {
             rgbody.velocity = new Vector2(value_inputControl.x * 速度 * Time.deltaTime, rgbody.velocity.y);
         }
@@ -203,6 +224,8 @@ public class PlayerController : MonoBehaviour
                 rbController.Throw(aim);
                 rbController = null;
                 _currentTrigger = null;
+                //停止输入
+                StartCoroutine(StopMoveInAir());
                 //反作用力函数
                 CounterForce(aim);
                 break;
