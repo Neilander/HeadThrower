@@ -96,7 +96,7 @@ public class PlayerController : MonoBehaviour
             //Debug.Log(((InputAction)obj).activeControl.device);
             var cur_device = ((InputAction)obj).activeControl.device;
             //isKeyboard = false;
-            switch (cur_device.device)
+            switch (cur_device)
             {
                 case Keyboard:
                     isKeyboard = true;
