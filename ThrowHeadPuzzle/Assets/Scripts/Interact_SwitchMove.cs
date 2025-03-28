@@ -18,16 +18,11 @@ public class Interact_SwitchMove : BaseInteraction
         mover = GetComponent<WorldMover>();
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            OnInteract(null);
-        }
-    }
 
     public override bool OnInteract(InteractionSignal signal)
     {
+        if (signal.signalType != InteractionSignalType.KeyPress)
+            return false;
         if (isPos1)
         {
             mover.MoveTo(pos2.position);
