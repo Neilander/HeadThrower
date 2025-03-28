@@ -18,6 +18,13 @@ public class Interact_SwitchMove : BaseInteraction
         mover = GetComponent<WorldMover>();
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            OnInteract(new InteractionSignal(gameObject, InteractionSignalType.KeyPress));
+        }
+    }
 
     public override bool OnInteract(InteractionSignal signal)
     {
