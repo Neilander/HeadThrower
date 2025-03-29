@@ -177,7 +177,7 @@ public class PlayerController : MonoBehaviour
                 break;
             case ThrowState.PickupAnimation:
                 //把头拼上
-                AttachHeads();
+                _currentTrigger.GetComponent<PickUpHead>().OnInteract(new InteractionSignal(gameObject, InteractionType.KeyPress));
                 break;
             case ThrowState.ThrowAnimation:
                 //HeadOnBody=>ThrowAnimation
@@ -239,8 +239,9 @@ public class PlayerController : MonoBehaviour
         {
             //执行不同状态的Update，如：
             case ThrowState.HeadOnBody:
-                //如果按下E，就投掷
-                if (eKeyAction.triggered)//按下E或者点击 || mouseAction.triggered
+                //如果鼠标右键，就投掷
+                //if (eKeyAction.triggered)//按下E或者点击 || mouseAction.triggered
+                if (Input.GetMouseButtonDown(1))
                 {
                     StartState(ThrowState.ThrowAnimation);
                 }
@@ -270,7 +271,8 @@ public class PlayerController : MonoBehaviour
                 break;
             case ThrowState.OtherHead:
                 //如果按下E，就投掷
-                if (eKeyAction.triggered)//按下E或者点击 || mouseAction.triggered
+                //if (eKeyAction.triggered)//按下E或者点击 || mouseAction.triggered
+                if (Input.GetMouseButtonDown(1))
                 {
                     StartState(ThrowState.ThrowAnimation);
                 }
@@ -451,7 +453,7 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region 捡起头部
-    [SerializeField] private Collider2D _currentTrigger; // 当前所在的触发器
+    [SerializeField] public Collider2D _currentTrigger; // 当前所在的触发器
 
     /// <summary>
     /// 检测周围物体是否能拾取（也就是玩家是否位于"Head"触发器内）
@@ -473,10 +475,7 @@ public class PlayerController : MonoBehaviour
     // 触发器进入时记录
     private void OnTriggerStay2D(Collider2D other)
     {
-        if (other.isTrigger) // 确保只检测触发器（非物理碰撞体）
-        {
-            _currentTrigger = other;
-        }
+        _currentTrigger = other;
     }
 
     // 触发器退出时清空记录
@@ -488,18 +487,18 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    [SerializeField] Vector3 头偏移量;
-    public void AttachHeads()
-    {
-        RigidbodyController controller = _currentTrigger.GetComponentInParent<RigidbodyController>();
-        //移除刚体
-        controller.DeAddRGbody();
-        //与身体组合，变成子对象
-        controller.transform.SetParent(transform);
-        //设置正确的位置
-        controller.transform.localPosition = 头偏移量;
-        controller.transform.eulerAngles = new Vector3(0, 0, 0);
-        controller.transform.localScale = new Vector3(1, 1, 1);
-    }
+    // [SerializeField] Vector3 头偏移量;
+    // public void AttachHeads()
+    // {
+    //     RigidbodyController controller = _currentTrigger.GetComponentInParent<RigidbodyController>();
+    //     //移除刚体
+    //     controller.DeAddRGbody();
+    //     //与身体组合，变成子对象
+    //     controller.transform.SetParent(transform);
+    //     //设置正确的位置
+    //     controller.transform.localPosition = 头偏移量;
+    //     controller.transform.eulerAngles = new Vector3(0, 0, 0);
+    //     controller.transform.localScale = new Vector3(1, 1, 1);
+    // }
     #endregion
 }
