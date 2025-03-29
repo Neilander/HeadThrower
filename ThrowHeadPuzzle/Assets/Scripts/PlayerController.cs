@@ -12,7 +12,7 @@ using System.Linq; // 添加LINQ支持
 public class PlayerController : MonoBehaviour
 {
     #region 公共变量
-    public InputControl inputControl;//输入
+    [SerializeField] public InputControl inputControl;//输入
     private InputAction mousePositionAction;
     private InputAction mouseAction;
     private InputAction eKeyAction;
@@ -35,7 +35,6 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         inputControl = new InputControl();
-        inputControl.Enable();
         capsuleCollider = GetComponent<CapsuleCollider2D>();
         // 创建一个新的输入动作来获取鼠标位置
         mousePositionAction = new InputAction(binding: "<Mouse>/position");
@@ -62,7 +61,7 @@ public class PlayerController : MonoBehaviour
     }
     void Update()
     {
-
+        //ValueMove();
         UpdateState();
 
         //当人没有头时不改变朝向
@@ -87,6 +86,7 @@ public class PlayerController : MonoBehaviour
     void OnEnable()
     {
         InputSystem.onActionChange += OnInputDiviceChange;
+        inputControl.Enable();
     }
 
     private void OnInputDiviceChange(object obj, InputActionChange deviceChange)
@@ -134,7 +134,7 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (value_inputControl.magnitude != 0 && canMove)
+        if (canMove)//value_inputControl.magnitude != 0 && 
         {
             rgbody.velocity = new Vector2(value_inputControl.x * 速度 * Time.deltaTime, rgbody.velocity.y);
         }
@@ -298,7 +298,7 @@ public class PlayerController : MonoBehaviour
             rgbody.AddForce(transform.up * 跳跃高度, ForceMode2D.Impulse);
     }
 
-    public void CanMove(InputAction.CallbackContext callbackContext)
+    public void ValueMove(InputAction.CallbackContext callbackContext)
     {
         value_inputControl = callbackContext.ReadValue<Vector2>();
     }
