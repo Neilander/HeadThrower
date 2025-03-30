@@ -135,4 +135,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   linkedInteractions: []
   bullet_speed: 15
+  disapper_time: 4
   canShoot: 0

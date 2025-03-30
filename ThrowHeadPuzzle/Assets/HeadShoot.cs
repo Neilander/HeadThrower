@@ -70,7 +70,7 @@ public class HeadShoot : BaseInteraction
             // 检查子对象的tag是否为"Bullet"
             if (childTransform.CompareTag("Bullet"))
             {
-                Debug.Log("找到tag为Bullet的子对象: " + childTransform.name);
+                // Debug.Log("找到tag为Bullet的子对象: " + childTransform.name);
                 // 在这里可以对找到的对象进行其他操作，比如修改属性等
                 curbullet = childTransform.gameObject;
                 // 例如：childObject.SetActive(false);
