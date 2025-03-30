@@ -216,11 +216,14 @@ public class PlayerController : MonoBehaviour
 
                 break;
             case ThrowState.ThrowAnimation:
-                //分离头 增加刚体组件
+                // 分离头 增加刚体组件
                 HeadAddrgbody();
                 DetachHeads();
                 //抛出
                 Vector2 aim = new Vector2(GetVectorAim().x, 0).normalized;
+                // 获取物体上的PickUpHead组件
+                PickUpHead _picUpHead = rbController.transform.GetComponent<PickUpHead>();
+                _picUpHead.isPickUp = false;
                 rbController.Throw(aim);
                 rbController = null;
                 _currentTrigger = null;

@@ -5,6 +5,7 @@ using UnityEngine;
 public class PickUpHead : BaseInteraction
 {
     public PlayerController playerController;
+    public bool isPickUp;
 
     void Update()
     {
@@ -30,6 +31,7 @@ public class PickUpHead : BaseInteraction
         controller.transform.localPosition = 头偏移量;
         controller.transform.eulerAngles = new Vector3(0, 0, 0);
         controller.transform.localScale = new Vector3(1, 1, 1);
+        isPickUp = true;
         return true;
     }
 }
