@@ -217,7 +217,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 196018, guid: f6a4bd709f80f124c96cee759b1c852d, type: 3}
       propertyPath: m_Name
-      value: Switch
+      value: HitPlat
       objectReference: {fileID: 0}
     - target: {fileID: 196018, guid: f6a4bd709f80f124c96cee759b1c852d, type: 3}
       propertyPath: m_Layer
@@ -283,13 +283,17 @@ PrefabInstance:
       propertyPath: isOn
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 11427938, guid: f6a4bd709f80f124c96cee759b1c852d, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 196018, guid: f6a4bd709f80f124c96cee759b1c852d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 895526208}
+    - targetCorrespondingSourceObject: {fileID: 196018, guid: f6a4bd709f80f124c96cee759b1c852d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 895526209}
   m_SourcePrefab: {fileID: 100100000, guid: f6a4bd709f80f124c96cee759b1c852d, type: 3}
 --- !u!1 &476385654
 GameObject:
@@ -2189,6 +2193,21 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 7
+--- !u!114 &895526209
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 895526203}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32778dc24cd7c6a45b72c0f10340d2c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isOn: 1
+  offSprite: {fileID: 21300220, guid: 2561fa950e1959e44b241148d2c869b2, type: 3}
+  onSprite: {fileID: 21300244, guid: 2561fa950e1959e44b241148d2c869b2, type: 3}
 --- !u!1 &935349608 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 196018, guid: f6a4bd709f80f124c96cee759b1c852d, type: 3}
@@ -2211,12 +2230,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a090ab0b20e90074a9631db81c0c08de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isOn: 0
+  linkedInteractions: []
+  isOn: 1
   offSprite: {fileID: 21300220, guid: 2561fa950e1959e44b241148d2c869b2, type: 3}
   onSprite: {fileID: 21300244, guid: 2561fa950e1959e44b241148d2c869b2, type: 3}
-  origin: {fileID: 0}
-  connectedToWhenOn: {fileID: 0}
-  connectedToWhenOff: {fileID: 0}
 --- !u!1 &1009150602
 GameObject:
   m_ObjectHideFlags: 0
@@ -2533,7 +2550,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 196018, guid: f6a4bd709f80f124c96cee759b1c852d, type: 3}
       propertyPath: m_Name
-      value: Switch (1)
+      value: StepPlat
       objectReference: {fileID: 0}
     - target: {fileID: 196018, guid: f6a4bd709f80f124c96cee759b1c852d, type: 3}
       propertyPath: m_Layer

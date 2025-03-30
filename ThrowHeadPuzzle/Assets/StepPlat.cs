@@ -2,16 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace MovingPlatformMaker2D
-{
-    public class StepPlat : MonoBehaviour
+
+    public class StepPlat : BaseInteraction
     {
         public bool isOn;
         public Sprite offSprite;
         public Sprite onSprite;
-        public Path origin;
-        public Path connectedToWhenOn;
-        public Path connectedToWhenOff;
+
 
         private SpriteRenderer rend;
 
@@ -36,4 +33,3 @@ namespace MovingPlatformMaker2D
             rend.sprite = isOn ? onSprite : offSprite;
         }
     }
-}

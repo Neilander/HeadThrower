@@ -15,7 +15,7 @@ public class HeadShoot : BaseInteraction
     public float FaceToMouse()
     {
         //当捡起来作为头的时候，不断瞄准鼠标
-        枪械朝向 = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
+        //枪械朝向 = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
 
         枪械朝向 = 枪械朝向.normalized;
 
@@ -26,10 +26,10 @@ public class HeadShoot : BaseInteraction
     }
     void Update()
     {
-        if (transform.GetComponent<PickUpHead>().isPickUp == true)
+        if (transform.GetComponent<PickUpHead>().isPickUp != true)
         {
-            transform.localScale = new Vector3(player.transform.localScale.x, player.transform.localScale.x, transform.localScale.z);
-            float angle_temp = FaceToMouse();
+            //transform.localScale = new Vector3(player.transform.localScale.x, player.transform.localScale.x, transform.localScale.z);
+            //float angle_temp = FaceToMouse();
             if (Input.GetMouseButtonDown(0))
             {
                 Debug.Log("shoot");
@@ -37,10 +37,14 @@ public class HeadShoot : BaseInteraction
                 FindBullet();
                 //Debug.Log(transform.localScale);
                 //Debug.Log(枪械朝向);
+                枪械朝向 = transform.localScale;
+                枪械朝向.y = 0;
+
                 OnInteract(new InteractionSignal(gameObject, InteractionType.KeyPress, 枪械朝向));
                 //重装弹药
 
-                初始角度 = new Vector3(0, 0, angle_temp + 90);
+                //初始角度 = new Vector3(0, 0, angle_temp + 90);
+                初始角度 = new Vector3(0, 0, 90);
                 GameObject bullet_reload = Instantiate(bullet, 初始位置, Quaternion.Euler(初始角度), transform);
                 bullet_reload.transform.localPosition = 初始位置;
             }
