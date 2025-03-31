@@ -22,13 +22,13 @@ public class Interact_SwitchMove : BaseInteraction
     {
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            OnInteract(new InteractionSignal(gameObject, InteractionSignalType.KeyPress));
+            OnInteract(new InteractionSignal(gameObject, InteractionType.KeyPress));
         }
     }
 
     public override bool OnInteract(InteractionSignal signal)
     {
-        if (signal.signalType != InteractionSignalType.KeyPress)
+        if (signal.type != InteractionType.KeyPress)
             return false;
         if (isPos1)
         {
