@@ -2,14 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine.Events;
 
-namespace ChatGPTWrapper {
+namespace ChatGPTWrapper
+{
 
     public class ChatGPTConversation : MonoBehaviour
     {
         [SerializeField]
         private string _apiKey = null;
 
-        public enum Model {
+        public enum Model
+        {
             ChatGPT,
             Davinci,
             Curie
@@ -17,28 +19,30 @@ namespace ChatGPTWrapper {
         [SerializeField]
         public Model _model = Model.ChatGPT;
         private string _selectedModel = null;
+        // 可在 Inspector 面板中设置的最大令牌数，用于限制回复的长度
         [SerializeField]
         private int _maxTokens = 3072;
+        // 可在 Inspector 面板中设置的温度参数，影响回复的随机性,越大越 随机
         [SerializeField]
         private float _temperature = 0.6f;
-        
+
         private string _uri;
         private List<(string, string)> _reqHeaders;
-        
+
 
         private Requests requests = new Requests();
         private Prompt _prompt;
         private Chat _chat;
         private string _lastUserMsg;
         private string _lastChatGPTMsg;
-
+        // 可在 Inspector 面板中设置的聊天机器人名称
         [SerializeField]
         private string _chatbotName = "ChatGPT";
 
-        [TextArea(4,6)]
+        [TextArea(4, 6)]
         public string _initialPrompt = "You are ChatGPT, a large language model trained by OpenAI.";
 
-
+        // 自定义的 Unity 事件，用于处理 ChatGPT 的回复消息
         public UnityStringEvent chatGPTResponse = new UnityStringEvent();
 
 
@@ -46,11 +50,12 @@ namespace ChatGPTWrapper {
         public void Init()
         {
             _reqHeaders = new List<(string, string)>
-            { 
+            {
                 ("Authorization", $"Bearer {_apiKey}"),
                 ("Content-Type", "application/json")
             };
-            switch (_model) {
+            switch (_model)
+            {
                 case Model.ChatGPT:
                     _chat = new Chat(_initialPrompt);
                     _uri = "https://api.openai.com/v1/chat/completions";
@@ -69,8 +74,10 @@ namespace ChatGPTWrapper {
             }
         }
 
-        public void ResetChat(string initialPrompt) {
-            switch (_model) {
+        public void ResetChat(string initialPrompt)
+        {
+            switch (_model)
+            {
                 case Model.ChatGPT:
                     _chat = new Chat(initialPrompt);
                     break;
@@ -84,22 +91,25 @@ namespace ChatGPTWrapper {
         {
             _lastUserMsg = message;
 
-            if (_model == Model.ChatGPT) {
+            if (_model == Model.ChatGPT)
+            {
                 _chat.AppendMessage(Chat.Speaker.User, message);
 
                 ChatGPTReq reqObj = new ChatGPTReq();
                 reqObj.model = _selectedModel;
                 reqObj.messages = _chat.CurrentChat;
-        
+
                 string json = JsonUtility.ToJson(reqObj);
 
 
 
                 StartCoroutine(requests.PostReq<ChatGPTRes>(_uri, json, ResolveChatGPT, _reqHeaders));
 
-               
 
-            } else {
+
+            }
+            else
+            {
                 _prompt.AppendText(Prompt.Speaker.User, message);
 
                 GPTReq reqObj = new GPTReq();
@@ -121,13 +131,13 @@ namespace ChatGPTWrapper {
             chatGPTResponse.Invoke(_lastChatGPTMsg);
 
             //If the total_tokens over 4096 token limitation, remove the oldest message after initial prompt
-			int totalToken = res.usage.total_tokens;
-			if (totalToken > 3850)
-			{
-				_chat.RemoveOldestMessage();
-			}
-			print("token: " + totalToken);
-		}
+            int totalToken = res.usage.total_tokens;
+            if (totalToken > 3850)
+            {
+                _chat.RemoveOldestMessage();
+            }
+            print("token: " + totalToken);
+        }
 
         private void ResolveGPT(GPTRes res)
         {
