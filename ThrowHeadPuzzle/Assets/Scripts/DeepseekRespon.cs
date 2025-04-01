@@ -24,6 +24,21 @@ public class DeepseekRespon : MonoBehaviour
     string playerName = "Player";
     bool isdone = false;
 
+    // 定义一个枚举来表示不同的模型选项
+    public enum AvailableModels
+    {
+        DeepSeekR1_1_5B,
+        DeepSeekR1_7B,
+        DeepSeekR1_14B,
+        DeepSeekR1_32B,
+        DeepSeekR1_671B,
+        DeepSeekV3,
+        通义千问2_5_7B
+        // 你可以在这里添加更多的模型选项
+    }
+
+    public AvailableModels selectedModel = AvailableModels.DeepSeekR1_1_5B; // 新增：可在视图窗口选择的模型枚举变量
+
     void Awake()
     {
         if (!isdone)
@@ -96,10 +111,13 @@ public class DeepseekRespon : MonoBehaviour
     /// <returns></returns>
     private string PrepareRequestBody(string input)
     {
+
+        // 根据选择的枚举值获取对应的模型名称
+        string modelName = GetModelNameFromEnum(selectedModel);
         // 根据API文档，构建请求体
         var request = new
         {
-            model =  "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B",
+            model = modelName,
             stream = false,
             max_tokens = 512,
             temperature = 0.7,
@@ -115,6 +133,35 @@ public class DeepseekRespon : MonoBehaviour
         };
         // 使用Newtonsoft.Json将请求对象序列化为JSON字符串
         return JsonConvert.SerializeObject(request);
+    }
+
+    /// <summary>
+    /// 根据枚举值获取对应的模型名称
+    /// </summary>
+    /// <param name="model"></param>
+    /// <returns></returns>
+    private string GetModelNameFromEnum(AvailableModels model)
+    {
+        switch (model)
+        {
+            case AvailableModels.DeepSeekR1_14B:
+                return "deepseek-ai/DeepSeek-R1-Distill-Qwen-14B";
+            case AvailableModels.DeepSeekR1_1_5B:
+                return "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B";
+            case AvailableModels.DeepSeekR1_32B:
+                return "deepseek-ai/DeepSeek-R1-Distill-Qwen-32B";
+            case AvailableModels.DeepSeekR1_671B:
+                return "deepseek-ai/DeepSeek-R1";
+            case AvailableModels.DeepSeekR1_7B:
+                return "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B";
+            case AvailableModels.DeepSeekV3:
+                return "deepseek-ai/DeepSeek-V3";
+            case AvailableModels.通义千问2_5_7B:
+                return "Qwen/Qwen2.5-7B-Instruct";
+            // 你可以在这里添加更多的case分支来处理更多的模型选项
+            default:
+                return "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B"; // 默认模型
+        }
     }
 
     /// <summary>
