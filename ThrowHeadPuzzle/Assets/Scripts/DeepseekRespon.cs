@@ -5,7 +5,8 @@ using System.Collections;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using Newtonsoft.Json; // 引入Newtonsoft.Json库用于处理JSON
+using Newtonsoft.Json;
+using System; // 引入Newtonsoft.Json库用于处理JSON
 
 public class DeepseekRespon : MonoBehaviour
 {
@@ -21,6 +22,16 @@ public class DeepseekRespon : MonoBehaviour
     string aiName = "AI Narrator";
     [SerializeField]
     string playerName = "Player";
+    bool isdone = false;
+
+    void Awake()
+    {
+        if (!isdone)
+        {
+            InitialSendTextToAPI();
+            isdone = !isdone;
+        }
+    }
 
     /// <summary>
     /// 发送prompt
@@ -88,7 +99,15 @@ public class DeepseekRespon : MonoBehaviour
         // 根据API文档，构建请求体
         var request = new
         {
-            model = "deepseek-3",
+            model =  "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B",
+            stream = false,
+            max_tokens = 512,
+            temperature = 0.7,
+            top_p = 0.7,
+            top_k = 50,
+            frequency_penalty = 0.5,
+            n = 1,
+            stop = new string[] { },
             messages = new[]
             {
                 new { role = "user", content = input }
@@ -116,6 +135,13 @@ public class DeepseekRespon : MonoBehaviour
                 // 创建请求内容
                 var content = new StringContent(requestBody, Encoding.UTF8, "application/json");
 
+                // 打印请求URL和请求头用于调试
+                Debug.Log($"请求URL: {apiUrl}");
+                foreach (var header in client.DefaultRequestHeaders)
+                {
+                    Debug.Log($"请求头: {header.Key}: {string.Join(", ", header.Value)}");
+                }
+
                 // 发送 POST 请求并等待响应
                 HttpResponseMessage response = await client.PostAsync(apiUrl, content);
 
@@ -126,24 +152,29 @@ public class DeepseekRespon : MonoBehaviour
                 {
                     Debug.Log($"请求头: {header.Key}: {string.Join(", ", header.Value)}"); // 新加：打印请求头
                 }
-                
+
                 if (response.IsSuccessStatusCode)
                 {
+                    // 读取响应内容
+                    string responseContent = await response.Content.ReadAsStringAsync();
+                    // 打印响应内容用于调试
+                    Debug.Log($"响应内容: {responseContent}"); // 新加：打印响应内容
                     // 读取响应内容
                     return await response.Content.ReadAsStringAsync();
                 }
                 else
                 {
-                    // 记录请求失败的状态码
-                    Debug.Log($"API 请求失败，状态码: {response.StatusCode}");
+                    // 记录请求失败的状态码和响应内容
+                    string errorContent = await response.Content.ReadAsStringAsync();
+                    Debug.Log($"API请求失败，状态码: {response.StatusCode}, 响应内容: {errorContent}"); // 修改：记录更详细的失败信息
                     return null;
                 }
             }
         }
         catch (HttpRequestException e)
         {
-            // 记录 HTTP 请求错误
-            Debug.Log($"HTTP 请求错误: {e.Message}");
+            // 记录HTTP请求错误和详细信息
+            Debug.Log($"HTTP请求错误: {e.Message}, 详细信息: {e.InnerException?.Message}"); // 修改：记录详细错误信息
             return null;
         }
         catch (System.Exception e)
@@ -176,16 +207,45 @@ public class DeepseekRespon : MonoBehaviour
     // 定义响应数据的结构
     private class ResponseData
     {
+        public string id;
         public Choice[] choices;
+        public Usage usage;
+        public int created;
+        public string model;
+        public string @object;
     }
 
     private class Choice
     {
         public Message message;
+        public string finish_reason;
     }
 
     private class Message
     {
+        public string role;
         public string content;
+        public string reasoning_content;
+        public ToolCall[] tool_calls;
+    }
+
+    private class ToolCall
+    {
+        public string id;
+        public string type;
+        public Function function;
+    }
+
+    private class Function
+    {
+        public string name;
+        public string arguments;
+    }
+
+    private class Usage
+    {
+        public int prompt_tokens;
+        public int completion_tokens;
+        public int total_tokens;
     }
 }
