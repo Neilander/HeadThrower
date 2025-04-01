@@ -7,12 +7,14 @@ public class Item
     public string name;
     public int id;
     public string description;
+    public Sprite image; // 新增图片字段
 
-    public Item(string name, int id, string description)
+    public Item(string name, int id, string description, Sprite image)
     {
         this.name = name;
         this.id = id;
         this.description = description;
+        this.image = image;
     }
 }
 
@@ -22,6 +24,9 @@ public class ItemFactory : MonoBehaviour
     // 存储所有物品的字典，键可以是物品名称或者编号
     private Dictionary<string, Item> itemDictionaryByName = new Dictionary<string, Item>();
     private Dictionary<int, Item> itemDictionaryById = new Dictionary<int, Item>();
+    [Header("Pictures Setting")]
+    public Sprite swordImage; // 剑的图片
+    public Sprite shieldImage; // 盾牌的图片
 
     void Awake()
     {
@@ -32,8 +37,8 @@ public class ItemFactory : MonoBehaviour
     // 初始化物品数据的方法
     private void InitializeItems()
     {
-        Item sword = new Item("Sword", 1, "A sharp sword for combat.");
-        Item shield = new Item("Shield", 2, "A sturdy shield for defense.");
+        Item sword = new Item("Sword", 1, "A sharp sword for combat.",swordImage);
+        Item shield = new Item("Shield", 2, "A sturdy shield for defense.",shieldImage);
 
         // 将物品添加到字典中
         itemDictionaryByName[sword.name] = sword;
@@ -62,4 +67,4 @@ public class ItemFactory : MonoBehaviour
         }
         return null;
     }
-}    
+}
