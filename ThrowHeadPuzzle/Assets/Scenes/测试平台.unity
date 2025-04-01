@@ -2222,7 +2222,7 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 446676, guid: f6a4bd709f80f124c96cee759b1c852d, type: 3}
   m_PrefabInstance: {fileID: 1351572164}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &935349610
+--- !u!114 &935349613
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2234,6 +2234,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a090ab0b20e90074a9631db81c0c08de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isOn: 0
+  offSprite: {fileID: 21300220, guid: 2561fa950e1959e44b241148d2c869b2, type: 3}
+  onSprite: {fileID: 21300244, guid: 2561fa950e1959e44b241148d2c869b2, type: 3}
+  origin: {fileID: 0}
+  connectedToWhenOn: {fileID: 0}
+  connectedToWhenOff: {fileID: 0}
 --- !u!1 &1009150602
 GameObject:
   m_ObjectHideFlags: 0
@@ -2619,7 +2625,7 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 196018, guid: f6a4bd709f80f124c96cee759b1c852d, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 935349610}
+      addedObject: {fileID: 935349613}
   m_SourcePrefab: {fileID: 100100000, guid: f6a4bd709f80f124c96cee759b1c852d, type: 3}
 --- !u!1 &1390444220
 GameObject:
@@ -3056,7 +3062,7 @@ GameObject:
   - component: {fileID: 1418689547}
   - component: {fileID: 1418689546}
   - component: {fileID: 1418689550}
-  - component: {fileID: 1418689549}
+  - component: {fileID: 1418689551}
   m_Layer: 0
   m_Name: Virtual Camera
   m_TagString: Untagged
@@ -3119,18 +3125,6 @@ Transform:
   - {fileID: 1636343161}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1418689549
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1418689545}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a5bb9e892b8a40345a2e752bda72ec4f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1418689550
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3143,6 +3137,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a8a05de0ac134f4f9d01bef6b9da077, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1418689551
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1418689545}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5bb9e892b8a40345a2e752bda72ec4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  virtualCamera: {fileID: 1418689546}
+  "\u4EBA\u7269\u8EAB\u4F53": {fileID: 1390444222}
+  adjustmentSpeed: 500
+  maxOrthoSize: 20
+  minOrthoSize: 3
+  changeVelocity: 0.1
+  smoothTime: 0.05
 --- !u!1 &1528819611
 GameObject:
   m_ObjectHideFlags: 0

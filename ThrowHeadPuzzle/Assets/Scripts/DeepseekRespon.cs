@@ -14,6 +14,8 @@ public class DeepseekRespon : MonoBehaviour
     public Text outputText; // 第二个 Text 用于显示回答
     public string apiUrl; // 硅基流动平台 API 的 URL
     public string apiKey; // API 密钥
+    [SerializeField]
+    private string initialRequirement;
     [TextArea(4, 6)]
     public string _initialPrompt;
     public UnityEvent<string> chatGPTResponse = new UnityEvent<string>();
@@ -128,6 +130,7 @@ public class DeepseekRespon : MonoBehaviour
             stop = new string[] { },
             messages = new[]
             {
+                //new { role = "system", content = initialRequirement + "\n" + knowledgeBaseContent }, // 添加初始要求和知识库信息
                 new { role = "user", content = input }
             }
         };
