@@ -36,7 +36,7 @@ public class GetItemData : MonoBehaviour
     {
         Item _tempItem = itemFactory.GetItemByName(item);
         if (_tempItem != null)
-            tmpText.text = $"Description: {_tempItem.description}";
+            tmpText.text = $"{_tempItem.name}: {_tempItem.description}";
         else
             tmpText.text = $"error";
     }
