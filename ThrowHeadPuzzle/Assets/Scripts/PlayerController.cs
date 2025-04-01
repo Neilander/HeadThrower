@@ -451,7 +451,7 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region 捡起头部
-    [SerializeField] private Collider2D _currentTrigger; // 当前所在的触发器
+    public Collider2D _currentTrigger; // 当前所在的触发器
 
     /// <summary>
     /// 检测周围物体是否能拾取（也就是玩家是否位于"Head"触发器内）
