@@ -11,9 +11,10 @@ public class Interact_SwitchMove : BaseInteraction
     private Transform pos1;
     [SerializeField]
     private Transform pos2;
-    public Transform Qsign;
 
     private bool isPos1 = true;
+    public Transform Qsign;
+
     void Start()
     {
         mover = GetComponent<WorldMover>();
