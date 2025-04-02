@@ -14,8 +14,8 @@ public class DeepseekRespon : MonoBehaviour
     public Text outputText; // 第二个 Text 用于显示回答
     public string apiUrl; // 硅基流动平台 API 的 URL
     public string apiKey; // API 密钥
-    [SerializeField]
-    private string initialRequirement;
+    [TextArea(4, 6)]
+    public string initialRequirement;
     [TextArea(4, 6)]
     public string _initialPrompt;
     public UnityEvent<string> chatGPTResponse = new UnityEvent<string>();
@@ -64,7 +64,7 @@ public class DeepseekRespon : MonoBehaviour
         }
 
         // 准备请求体
-        string requestBody = PrepareRequestBody(input);
+        string requestBody = PrepareRequestBody(input, "system");
         Debug.Log($"请求体: {requestBody}");
 
         // 调用 API 并获取响应
@@ -87,7 +87,7 @@ public class DeepseekRespon : MonoBehaviour
         }
 
         // 准备请求体
-        string requestBody = PrepareRequestBody(input);
+        string requestBody = PrepareRequestBody(input, "user");
         Debug.Log($"请求体: {requestBody}");
 
         // 调用 API 并获取响应
@@ -111,7 +111,7 @@ public class DeepseekRespon : MonoBehaviour
     /// </summary>
     /// <param name="input"></param>
     /// <returns></returns>
-    private string PrepareRequestBody(string input)
+    private string PrepareRequestBody(string input, string _role)
     {
 
         // 根据选择的枚举值获取对应的模型名称
@@ -131,7 +131,8 @@ public class DeepseekRespon : MonoBehaviour
             messages = new[]
             {
                 //new { role = "system", content = initialRequirement + "\n" + knowledgeBaseContent }, // 添加初始要求和知识库信息
-                new { role = "user", content = input }
+                new { role = "system", content = initialRequirement + "\n"}, // 添加初始要求和知识库信息
+                new { role = _role, content = input }
             }
         };
         // 使用Newtonsoft.Json将请求对象序列化为JSON字符串

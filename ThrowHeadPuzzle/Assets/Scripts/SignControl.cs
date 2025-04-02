@@ -5,8 +5,9 @@ using UnityEngine;
 public class SignControl : MonoBehaviour
 {
     public Transform player;
+    public Vector3 偏移;
     void Update()
     {
-        transform.position = player.transform.position + new Vector3(0, 1.02f, 0);
+        transform.position = player.transform.position + 偏移;
     }
 }

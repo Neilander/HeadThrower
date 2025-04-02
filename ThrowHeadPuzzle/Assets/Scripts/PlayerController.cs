@@ -29,7 +29,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private bool isKeyboard;
     public int isMoveForward;//表示人物是正走/倒走状态，1代表正走，-1代表倒走
     public RigidbodyController rbController;
-    [SerializeField] Transform Sign;
+    [SerializeField] Transform ESign;
     #endregion
 
     private void Awake()
@@ -205,7 +205,7 @@ public class PlayerController : MonoBehaviour
             case ThrowState.NoHead:
                 //PickUp(最近的头);
                 //捡起头后取消显示提示
-                SpriteRenderer signRenderer = Sign.GetComponent<SpriteRenderer>();
+                SpriteRenderer signRenderer = ESign.GetComponent<SpriteRenderer>();
                 signRenderer.enabled = false;  //取消激活 SpriteRenderer
                 break;
             case ThrowState.OtherHead:
@@ -255,12 +255,12 @@ public class PlayerController : MonoBehaviour
                 if (CanPickUp())
                 {
                     //Debug.Log("可以拾取这个Head！");
-                    SpriteRenderer signRenderer = Sign.GetComponent<SpriteRenderer>();
+                    SpriteRenderer signRenderer = ESign.GetComponent<SpriteRenderer>();
                     signRenderer.enabled = true;  //激活 SpriteRenderer
                 }
                 else
                 {
-                    SpriteRenderer signRenderer = Sign.GetComponent<SpriteRenderer>();
+                    SpriteRenderer signRenderer = ESign.GetComponent<SpriteRenderer>();
                     signRenderer.enabled = false;  //取消激活 SpriteRenderer
                 }
                 if (eKeyAction.triggered)//按下E或者点击 || mouseAction.triggered
