@@ -25,6 +25,7 @@ public class PlatformMovement : BaseInteraction
     private Transform pos2;
 
     private bool isPos1 = true;
+    private Vector3 lastPlatformPosition; // 记录平台上一帧的位置
 
 
     private void Awake()
@@ -38,7 +39,7 @@ public class PlatformMovement : BaseInteraction
         {
             playerOnPlatform = true;
             playerTransform = other.transform;
-            offset = playerTransform.position - transform.position;
+            //offset = playerTransform.position - transform.position;
             //playerTransform = other.transform;
             // 计算玩家相对于平台的初始偏移量
         }
@@ -68,8 +69,10 @@ public class PlatformMovement : BaseInteraction
 
     private void Update()
     {
+        float platformXMovement = transform.position.x - lastPlatformPosition.x;
         if (playerOnPlatform)
         {
+
             if (playerTransform != null)
             {
                 if (Input.GetKeyDown(KeyCode.Q))
@@ -77,19 +80,21 @@ public class PlatformMovement : BaseInteraction
                     isMoving = true;
                     OnInteract(new InteractionSignal(gameObject, InteractionType.KeyPress));
                 }
-                // 让玩家跟随平台移动
-                Debug.Log(playerTransform.position + "\n" + transform.position);
-                playerTransform.position = transform.position + offset;
+
+
+                // 让玩家跟随平台移动                
+                playerTransform.position = new Vector3(playerTransform.position.x + platformXMovement, playerTransform.position.y, playerTransform.position.z);
                 // 动态更新offset
-                offset = playerTransform.position - transform.position;
+                //offset = playerTransform.position - transform.position;
             }
 
             // 玩家在平台上可以自由移动
             // Vector2 movement = movementAction.ReadValue<Vector2>();
             // playerTransform.Translate(movement * Time.deltaTime);
 
-
         }
+        // 更新平台上一帧的位置
+        lastPlatformPosition = transform.position;
     }
 
     public override bool OnInteract(InteractionSignal signal)
