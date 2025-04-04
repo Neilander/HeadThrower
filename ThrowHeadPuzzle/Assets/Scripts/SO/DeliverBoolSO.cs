@@ -7,17 +7,12 @@ using UnityEngine.Events;
 
 public class DeliverBoolSO : ScriptableObject
 {
-    public UnityEvent<bool> eventQ;
-    public UnityEvent<bool> eventE;
+    public UnityAction<bool> _boolvalue;
 
-    public void Change_Q_State(bool _bool)
+    public void RaiseEvent(bool _bool)
     {
-        eventQ?.Invoke(_bool);
+        _boolvalue?.Invoke(_bool);
     }
 
-    public void Change_E_State(bool _bool)
-    {
-        eventE?.Invoke(_bool);
-    }
 }
 

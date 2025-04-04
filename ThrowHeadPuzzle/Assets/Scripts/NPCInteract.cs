@@ -5,16 +5,18 @@ using UnityEngine.SceneManagement;
 
 public class NPCInteract : BaseInteraction
 {
-    public DeliverBoolSO eventE;
+    public DeliverBoolSO _keyboolSO;
+    public DeliverBoolSO _UIboolSO;
+
     [SerializeField]
     bool playerInArea;
-    public string sceneToLoad;
+    // public string sceneToLoad;
 
     void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
         {
-            eventE.Change_E_State(true);
+            _keyboolSO.RaiseEvent(true);
             playerInArea = true;
         }
     }
@@ -23,7 +25,7 @@ public class NPCInteract : BaseInteraction
     {
         if (collision.CompareTag("Player"))
         {
-            eventE.Change_E_State(false);
+            _keyboolSO.RaiseEvent(false);
             playerInArea = false;
         }
     }
@@ -38,19 +40,13 @@ public class NPCInteract : BaseInteraction
 
     public override bool OnInteract(InteractionSignal signal)
     {
-        LoadScene();
+        LoadUIScene();
         return true;
     }
 
-    private void LoadScene()
+    private void LoadUIScene()
     {
-        if (!string.IsNullOrEmpty(sceneToLoad))
-        {
-            SceneManager.LoadSceneAsync(sceneToLoad, LoadSceneMode.Additive);
-        }
-        else
-        {
-            Debug.LogError("场景名称未设置，无法加载场景。");
-        }
+        Debug.Log("加载UI");
+        _UIboolSO.RaiseEvent(true);
     }
 }

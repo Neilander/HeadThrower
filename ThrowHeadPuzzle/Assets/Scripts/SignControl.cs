@@ -8,29 +8,28 @@ public class SignControl : MonoBehaviour
 {
     public Transform player;
     public Vector3 偏移;
-    [SerializeField] SpriteRenderer spriteRendererE;
-    [SerializeField] SpriteRenderer spriteRendererQ;
-    public DeliverBoolSO eventboolSO;
+    [SerializeField] SpriteRenderer spriteRenderer;
+    //[SerializeField] SpriteRenderer spriteRendererQ;
+    public DeliverBoolSO _boolSO;
+
+    void Awake()
+    {
+        spriteRenderer = transform.GetComponent<SpriteRenderer>();
+    }
 
     private void OnEnable()
     {
-        eventboolSO.eventE.AddListener(UpdateStateE);
-        eventboolSO.eventQ.AddListener(UpdateStateQ);
+        _boolSO._boolvalue += UpdateState;
     }
 
     private void OnDisable()
     {
-        eventboolSO.eventE.RemoveListener(UpdateStateE);
-        eventboolSO.eventQ.RemoveListener(UpdateStateQ);
+        _boolSO._boolvalue += UpdateState;
     }
 
-    void UpdateStateE(bool _bool)
+    void UpdateState(bool _bool)
     {
-        spriteRendererE.enabled = _bool;
-    }
-    void UpdateStateQ(bool _bool)
-    {
-        spriteRendererQ.enabled = _bool;
+        spriteRenderer.enabled = _bool;
     }
     void Update()
     {

@@ -9,9 +9,9 @@ public class DeliverStringSO : ScriptableObject
 {
     public ObjectType objectType;
     [SerializeField]
-    public UnityEvent<string> ItemData;
+    public UnityAction<string> ItemData;
     [SerializeField]
-    public UnityEvent<string> NPCData;
+    public UnityAction<string> NPCData;
     public void DeliverItem(string ItemName)
     {
         ItemData?.Invoke(ItemName);

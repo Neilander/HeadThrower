@@ -4607,9 +4607,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 1390444222}
   "\u504F\u79FB": {x: 0, y: 1.75, z: 0}
-  spriteRendererE: {fileID: 1775876084}
-  spriteRendererQ: {fileID: 895383526}
-  eventboolSO: {fileID: 11400000, guid: 78cc44d8dd857784ab2dfd791a4cb5cf, type: 2}
+  spriteRenderer: {fileID: 0}
+  _boolSO: {fileID: 11400000, guid: db00b291809604c47a8262d55e9cc94e, type: 2}
 --- !u!212 &895383526
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -5165,9 +5164,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   linkedInteractions: []
-  eventE: {fileID: 11400000, guid: 78cc44d8dd857784ab2dfd791a4cb5cf, type: 2}
+  _keyboolSO: {fileID: 11400000, guid: 78cc44d8dd857784ab2dfd791a4cb5cf, type: 2}
+  _UIboolSO: {fileID: 11400000, guid: 666217c2982adb34080ae737062f80a2, type: 2}
   playerInArea: 0
-  sceneToLoad: "\u4EBA\u7269\u5BF9\u8BDDUIDeepseek version"
 --- !u!1 &1149815864
 GameObject:
   m_ObjectHideFlags: 0
@@ -6494,9 +6493,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 1390444222}
   "\u504F\u79FB": {x: 0, y: 1.75, z: 0}
-  spriteRendererE: {fileID: 1775876084}
-  spriteRendererQ: {fileID: 895383526}
-  eventboolSO: {fileID: 11400000, guid: 78cc44d8dd857784ab2dfd791a4cb5cf, type: 2}
+  spriteRenderer: {fileID: 0}
+  _boolSO: {fileID: 11400000, guid: 78cc44d8dd857784ab2dfd791a4cb5cf, type: 2}
 --- !u!212 &1775876084
 SpriteRenderer:
   m_ObjectHideFlags: 0

@@ -43,7 +43,7 @@ public class PickUpHead : BaseInteraction
     {
         if (collision.CompareTag("Player"))
         {
-            eventE.Change_E_State(true);
+            eventE.RaiseEvent(true);
         }
     }
 
@@ -51,7 +51,7 @@ public class PickUpHead : BaseInteraction
     {
         if (collision.CompareTag("Player"))
         {
-            eventE.Change_E_State(false);
+            eventE.RaiseEvent(false);
         }
     }
 }
