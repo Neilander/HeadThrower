@@ -251,18 +251,20 @@ public class PlayerController : MonoBehaviour
                 break;
 
             case ThrowState.NoHead:
+                // if (CanPickUp())
+                // {
+                //     //Debug.Log("可以拾取这个Head！");
+                //     SpriteRenderer signRenderer = ESign.GetComponent<SpriteRenderer>();
+                //     signRenderer.enabled = true;  //激活 SpriteRenderer
+                // }
+                // else
+                // {
+                //     SpriteRenderer signRenderer = ESign.GetComponent<SpriteRenderer>();
+                //     signRenderer.enabled = false;  //取消激活 SpriteRenderer
+                // }
+                
                 //如果按下E，并且范围里有可以捡起的头，就捡起最近的
-                if (CanPickUp())
-                {
-                    //Debug.Log("可以拾取这个Head！");
-                    SpriteRenderer signRenderer = ESign.GetComponent<SpriteRenderer>();
-                    signRenderer.enabled = true;  //激活 SpriteRenderer
-                }
-                else
-                {
-                    SpriteRenderer signRenderer = ESign.GetComponent<SpriteRenderer>();
-                    signRenderer.enabled = false;  //取消激活 SpriteRenderer
-                }
+
                 if (eKeyAction.triggered)//按下E或者点击 || mouseAction.triggered
                 {
                     //满足 检测到可拾取的头 collider触发器

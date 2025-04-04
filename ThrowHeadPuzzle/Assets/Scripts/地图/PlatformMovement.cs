@@ -17,7 +17,6 @@ public class PlatformMovement : BaseInteraction
     private bool playerOnPlatform = false;
     [SerializeField]
 
-    private Vector3 offset;
     public Transform Qsign;
     [SerializeField]
     private Transform pos1;
@@ -39,9 +38,6 @@ public class PlatformMovement : BaseInteraction
         {
             playerOnPlatform = true;
             playerTransform = other.transform;
-            //offset = playerTransform.position - transform.position;
-            //playerTransform = other.transform;
-            // 计算玩家相对于平台的初始偏移量
         }
     }
 
@@ -61,9 +57,7 @@ public class PlatformMovement : BaseInteraction
     {
         if (other.CompareTag("Player"))
         {
-            //Debug.Log("Find Player!");
-            //Qsign.GetComponent<SpriteRenderer>().enabled = true;
-            //playerTransform = other.transform;
+            
         }
     }
 
@@ -81,16 +75,12 @@ public class PlatformMovement : BaseInteraction
                     OnInteract(new InteractionSignal(gameObject, InteractionType.KeyPress));
                 }
 
-
                 // 让玩家跟随平台移动                
-                playerTransform.position = new Vector3(playerTransform.position.x + platformXMovement, playerTransform.position.y, playerTransform.position.z);
-                // 动态更新offset
-                //offset = playerTransform.position - transform.position;
+                playerTransform.position = 
+                new Vector3(playerTransform.position.x + platformXMovement,
+                playerTransform.position.y,
+                playerTransform.position.z);
             }
-
-            // 玩家在平台上可以自由移动
-            // Vector2 movement = movementAction.ReadValue<Vector2>();
-            // playerTransform.Translate(movement * Time.deltaTime);
 
         }
         // 更新平台上一帧的位置
