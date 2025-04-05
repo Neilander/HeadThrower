@@ -61,7 +61,7 @@ public class PlayerController : MonoBehaviour
     }
     void Update()
     {
-        //ValueMove();
+        //状态机更新
         UpdateState();
 
         //当人没有头时不改变朝向
