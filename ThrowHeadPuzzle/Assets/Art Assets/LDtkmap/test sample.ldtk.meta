@@ -20,9 +20,9 @@ ScriptedImporter:
   _useParallax: 1
   _intGridValues:
   - _key: Groudmap_1
-    _asset: {instanceID: 0}
+    _asset: {fileID: 11400000, guid: f64c74d042347e54780fe18288594ba1, type: 2}
   - _key: Groudmap_2
-    _asset: {instanceID: 0}
+    _asset: {fileID: 11400000, guid: f64c74d042347e54780fe18288594ba1, type: 2}
   _entities:
   - _key: NPCtest
     _asset: {fileID: 6477393072208536278, guid: 3fa466bb75e289740a902215532ba157, type: 3}
