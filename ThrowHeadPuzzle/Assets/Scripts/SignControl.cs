@@ -11,10 +11,13 @@ public class SignControl : MonoBehaviour
     [SerializeField] SpriteRenderer spriteRenderer;
     //[SerializeField] SpriteRenderer spriteRendererQ;
     public DeliverBoolSO _boolSO;
+    public DeliverTransformSO transformSO;
 
     void Awake()
     {
         spriteRenderer = transform.GetComponent<SpriteRenderer>();
+        transformSO.RaiseEvent(transform);
+
     }
 
     private void OnEnable()
@@ -24,7 +27,7 @@ public class SignControl : MonoBehaviour
 
     private void OnDisable()
     {
-        _boolSO._boolvalue += UpdateState;
+        _boolSO._boolvalue -= UpdateState;
     }
 
     void UpdateState(bool _bool)

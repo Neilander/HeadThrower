@@ -16,8 +16,12 @@ public class PlatformMovement : BaseInteraction
 
     private bool playerOnPlatform = false;
     [SerializeField]
+    public DeliverBoolSO QsignboolSO;
 
+    public DeliverTransformSO QsignSO;
     public Transform Qsign;
+
+
     [SerializeField]
     private Transform pos1;
     [SerializeField]
@@ -32,12 +36,35 @@ public class PlatformMovement : BaseInteraction
         mover = GetComponent<WorldMover>();
 
     }
+    private void OnEnable()
+    {
+        // 尝试在未触发事件时读取最新的 Transform 值
+        Transform receivedTransform = QsignSO.GetLatestTransform();
+        if (receivedTransform != null)
+        {
+            HandleTransformReceived(receivedTransform);
+        }
+        else
+        {
+            // 如果还未存储 Transform 值，订阅事件
+            QsignSO._transform += HandleTransformReceived;
+        }
+        // // 订阅 _transform 事件
+        // QsignSO._transform += HandleTransformReceived;
+    }
+
+    private void OnDisable()
+    {
+        // 取消订阅 _transform 事件，防止内存泄漏
+        QsignSO._transform -= HandleTransformReceived;
+    }
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
         {
             playerOnPlatform = true;
             playerTransform = other.transform;
+            QsignboolSO.RaiseEvent(true);
         }
     }
 
@@ -50,6 +77,7 @@ public class PlatformMovement : BaseInteraction
             playerOnPlatform = false;
             playerTransform = null;
             isMoving = false;
+            QsignboolSO.RaiseEvent(false);
         }
     }
 
@@ -57,7 +85,7 @@ public class PlatformMovement : BaseInteraction
     {
         if (other.CompareTag("Player"))
         {
-            
+
         }
     }
 
@@ -76,7 +104,7 @@ public class PlatformMovement : BaseInteraction
                 }
 
                 // 让玩家跟随平台移动                
-                playerTransform.position = 
+                playerTransform.position =
                 new Vector3(playerTransform.position.x + platformXMovement,
                 playerTransform.position.y,
                 playerTransform.position.z);
@@ -85,6 +113,17 @@ public class PlatformMovement : BaseInteraction
         }
         // 更新平台上一帧的位置
         lastPlatformPosition = transform.position;
+    }
+
+    /// <summary>
+    /// 在这里处理接收到的 Transform 值
+    /// </summary>
+    /// <param name="receivedTransform"></param>
+    private void HandleTransformReceived(Transform receivedTransform)
+    {
+        Debug.Log("Received Transform: " + receivedTransform.name);
+        // 在这里进行其他操作
+        Qsign = receivedTransform;
     }
 
     public override bool OnInteract(InteractionSignal signal)
