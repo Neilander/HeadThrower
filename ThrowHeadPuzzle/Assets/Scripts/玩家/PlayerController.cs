@@ -29,7 +29,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private bool isKeyboard;
     public int isMoveForward;//表示人物是正走/倒走状态，1代表正走，-1代表倒走
     public RigidbodyController rbController;
-    [SerializeField] Transform Sign;
+    [SerializeField] Transform ESign;
     #endregion
 
     private void Awake()
@@ -61,7 +61,7 @@ public class PlayerController : MonoBehaviour
     }
     void Update()
     {
-        //ValueMove();
+        //状态机更新
         UpdateState();
 
         //当人没有头时不改变朝向
@@ -205,7 +205,7 @@ public class PlayerController : MonoBehaviour
             case ThrowState.NoHead:
                 //PickUp(最近的头);
                 //捡起头后取消显示提示
-                SpriteRenderer signRenderer = Sign.GetComponent<SpriteRenderer>();
+                SpriteRenderer signRenderer = ESign.GetComponent<SpriteRenderer>();
                 signRenderer.enabled = false;  //取消激活 SpriteRenderer
                 break;
             case ThrowState.OtherHead:
@@ -251,18 +251,20 @@ public class PlayerController : MonoBehaviour
                 break;
 
             case ThrowState.NoHead:
+                // if (CanPickUp())
+                // {
+                //     //Debug.Log("可以拾取这个Head！");
+                //     SpriteRenderer signRenderer = ESign.GetComponent<SpriteRenderer>();
+                //     signRenderer.enabled = true;  //激活 SpriteRenderer
+                // }
+                // else
+                // {
+                //     SpriteRenderer signRenderer = ESign.GetComponent<SpriteRenderer>();
+                //     signRenderer.enabled = false;  //取消激活 SpriteRenderer
+                // }
+                
                 //如果按下E，并且范围里有可以捡起的头，就捡起最近的
-                if (CanPickUp())
-                {
-                    //Debug.Log("可以拾取这个Head！");
-                    SpriteRenderer signRenderer = Sign.GetComponent<SpriteRenderer>();
-                    signRenderer.enabled = true;  //激活 SpriteRenderer
-                }
-                else
-                {
-                    SpriteRenderer signRenderer = Sign.GetComponent<SpriteRenderer>();
-                    signRenderer.enabled = false;  //取消激活 SpriteRenderer
-                }
+
                 if (eKeyAction.triggered)//按下E或者点击 || mouseAction.triggered
                 {
                     //满足 检测到可拾取的头 collider触发器

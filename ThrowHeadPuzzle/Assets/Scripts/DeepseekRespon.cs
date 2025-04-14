@@ -14,8 +14,8 @@ public class DeepseekRespon : MonoBehaviour
     public Text outputText; // 第二个 Text 用于显示回答
     public string apiUrl; // 硅基流动平台 API 的 URL
     public string apiKey; // API 密钥
-    [SerializeField]
-    private string initialRequirement;
+    [TextArea(4, 6)]
+    public string initialRequirement;
     [TextArea(4, 6)]
     public string _initialPrompt;
     public UnityEvent<string> chatGPTResponse = new UnityEvent<string>();
@@ -64,7 +64,7 @@ public class DeepseekRespon : MonoBehaviour
         }
 
         // 准备请求体
-        string requestBody = PrepareRequestBody(input);
+        string requestBody = InitialPrepareRequestBody(input, "system");
         Debug.Log($"请求体: {requestBody}");
 
         // 调用 API 并获取响应
@@ -87,7 +87,7 @@ public class DeepseekRespon : MonoBehaviour
         }
 
         // 准备请求体
-        string requestBody = PrepareRequestBody(input);
+        string requestBody = PrepareRequestBody(input, "user");
         Debug.Log($"请求体: {requestBody}");
 
         // 调用 API 并获取响应
@@ -107,11 +107,43 @@ public class DeepseekRespon : MonoBehaviour
     }
 
     /// <summary>
+    /// 初始化发送到 API 的请求体
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
+    private string InitialPrepareRequestBody(string input, string _role)
+    {
+
+        // 根据选择的枚举值获取对应的模型名称
+        string modelName = GetModelNameFromEnum(selectedModel);
+        // 根据API文档，构建请求体
+        var request = new
+        {
+            model = modelName,
+            stream = false,
+            max_tokens = 512,
+            temperature = 0.7,
+            top_p = 0.7,
+            top_k = 50,
+            frequency_penalty = 0.5,
+            n = 1,
+            stop = new string[] { },
+            messages = new[]
+            {
+                new { role = _role, content = input }
+            }
+        };
+        // 使用Newtonsoft.Json将请求对象序列化为JSON字符串
+        return JsonConvert.SerializeObject(request);
+    }
+
+
+    /// <summary>
     /// 准备发送到 API 的请求体
     /// </summary>
     /// <param name="input"></param>
     /// <returns></returns>
-    private string PrepareRequestBody(string input)
+    private string PrepareRequestBody(string input, string _role)
     {
 
         // 根据选择的枚举值获取对应的模型名称
@@ -131,7 +163,8 @@ public class DeepseekRespon : MonoBehaviour
             messages = new[]
             {
                 //new { role = "system", content = initialRequirement + "\n" + knowledgeBaseContent }, // 添加初始要求和知识库信息
-                new { role = "user", content = input }
+                new { role = "system", content = initialRequirement + "\n"}, // 添加初始要求和知识库信息
+                new { role = _role, content = input }
             }
         };
         // 使用Newtonsoft.Json将请求对象序列化为JSON字符串
@@ -186,10 +219,10 @@ public class DeepseekRespon : MonoBehaviour
                 var content = new StringContent(requestBody, Encoding.UTF8, "application/json");
 
                 // 打印请求URL和请求头用于调试
-                Debug.Log($"请求URL: {apiUrl}");
+                //Debug.Log($"请求URL: {apiUrl}");
                 foreach (var header in client.DefaultRequestHeaders)
                 {
-                    Debug.Log($"请求头: {header.Key}: {string.Join(", ", header.Value)}");
+                    //Debug.Log($"请求头: {header.Key}: {string.Join(", ", header.Value)}");
                 }
 
                 // 发送 POST 请求并等待响应
@@ -197,11 +230,11 @@ public class DeepseekRespon : MonoBehaviour
 
 
                 // 打印请求URL和请求头用于调试
-                Debug.Log($"请求URL: {apiUrl}"); // 新加：打印请求URL
-                foreach (var header in client.DefaultRequestHeaders)
-                {
-                    Debug.Log($"请求头: {header.Key}: {string.Join(", ", header.Value)}"); // 新加：打印请求头
-                }
+                //Debug.Log($"请求URL: {apiUrl}"); // 新加：打印请求URL
+                // foreach (var header in client.DefaultRequestHeaders)
+                // {
+                //     //Debug.Log($"请求头: {header.Key}: {string.Join(", ", header.Value)}"); // 新加：打印请求头
+                // }
 
                 if (response.IsSuccessStatusCode)
                 {

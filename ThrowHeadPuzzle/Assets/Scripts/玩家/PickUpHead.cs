@@ -1,11 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+
 
 public class PickUpHead : BaseInteraction
 {
     public PlayerController playerController;
     public bool isPickUp;
+    public DeliverBoolSO eventE;
+
 
     void Update()
     {
@@ -33,5 +37,21 @@ public class PickUpHead : BaseInteraction
         controller.transform.localScale = new Vector3(1, 1, 1);
         isPickUp = true;
         return true;
+    }
+
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
+        {
+            eventE.RaiseEvent(true);
+        }
+    }
+
+    void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
+        {
+            eventE.RaiseEvent(false);
+        }
     }
 }

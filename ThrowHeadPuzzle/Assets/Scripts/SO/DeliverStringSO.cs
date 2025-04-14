@@ -8,10 +8,17 @@ using UnityEngine.Events;
 public class DeliverStringSO : ScriptableObject
 {
     public ObjectType objectType;
-    public UnityEvent<string> ItemData;
-    public void RaiseEvent(string ItemName)
+    [SerializeField]
+    public UnityAction<string> ItemData;
+    [SerializeField]
+    public UnityAction<string> NPCData;
+    public void DeliverItem(string ItemName)
     {
         ItemData?.Invoke(ItemName);
+    }
+    public void DeliverNPC(string NPCName)
+    {
+        ItemData?.Invoke(NPCName);
     }
 }
 

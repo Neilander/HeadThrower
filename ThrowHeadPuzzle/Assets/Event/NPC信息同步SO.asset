@@ -16,3 +16,6 @@ MonoBehaviour:
   ItemData:
     m_PersistentCalls:
       m_Calls: []
+  NPCData:
+    m_PersistentCalls:
+      m_Calls: []

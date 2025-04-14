@@ -13,6 +13,8 @@ public class Interact_SwitchMove : BaseInteraction
     private Transform pos2;
 
     private bool isPos1 = true;
+    public Transform Qsign;
+
     void Start()
     {
         mover = GetComponent<WorldMover>();
@@ -23,11 +25,14 @@ public class Interact_SwitchMove : BaseInteraction
         if (Input.GetKeyDown(KeyCode.Q))
         {
             OnInteract(new InteractionSignal(gameObject, InteractionType.KeyPress));
+
         }
     }
 
     public override bool OnInteract(InteractionSignal signal)
     {
+        Qsign.GetComponent<SpriteRenderer>().enabled = false;
+
         if (signal.type != InteractionType.KeyPress)
             return false;
         if (isPos1)
@@ -40,5 +45,24 @@ public class Interact_SwitchMove : BaseInteraction
         }
         isPos1 = !isPos1;
         return true;
+    }
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
+        {
+            //执行按键提示
+            Qsign.GetComponent<SpriteRenderer>().enabled = true;
+            //执行同步人物左右移动
+        }
+    }
+
+    void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
+        { //执行按键提示
+            Qsign.GetComponent<SpriteRenderer>().enabled = false;
+
+            //执行停止同步人物左右移动}
+        }
     }
 }
