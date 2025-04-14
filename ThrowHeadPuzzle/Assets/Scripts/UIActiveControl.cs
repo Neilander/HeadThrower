@@ -17,16 +17,12 @@ public class UIActiveControl : MonoBehaviour
 
     private void OnDisable()
     {
-        _UIboolSO._boolvalue += UpdateState;
+        _UIboolSO._boolvalue -= UpdateState;
     }
 
     private void UpdateState(bool _bool)
     {
         _activebool = _bool;
-    }
-
-    void Update()
-    {
         menu_transform.gameObject.SetActive(_activebool);
     }
 }

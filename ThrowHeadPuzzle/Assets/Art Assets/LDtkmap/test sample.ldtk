@@ -10,7 +10,7 @@
 	},
 	"iid": "34e9c280-1030-11f0-a9b5-7143c6518e86",
 	"jsonVersion": "1.5.3",
-	"appBuildId": 478021,
+	"appBuildId": 473703,
 	"nextUid": 33,
 	"identifierStyle": "Capitalize",
 	"toc": [],
@@ -39,7 +39,7 @@
 	"levelNamePattern": "Level_%idx",
 	"tutorialDesc": null,
 	"customCommands": [{
-		"command": "../../../Library/LDtkTilesetExporter/ExportTilesetDefinition.exe \"test sample\"",
+		"command": "../../../Library/LDtkTilesetExporter/ExportTilesetDefinitionMac.sh \"test sample\" $1",
 		"when": "AfterSave"
 	}],
 	"flags": [],
