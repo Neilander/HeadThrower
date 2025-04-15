@@ -1,14 +1,14 @@
-using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.Events;
 using System.Collections;
+using System.Collections.Generic;
+using Newtonsoft.Json;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using System; // 引入Newtonsoft.Json库用于处理JSON
+using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.UI;
 
-public class DeepseekRespon : MonoBehaviour
+public class ScenePuzzleAi : MonoBehaviour
 {
     public InputField inputText; // 第一个 InputField 用于输入文本
     public Text outputText; // 第二个 Text 用于显示回答
@@ -28,15 +28,13 @@ public class DeepseekRespon : MonoBehaviour
 
     [Header("传入的场景")]
     public AIDialogueScenario gameScenario;
-    public ScenePuzzleScenario puzzleScenario;
 
     [Header("温度")]
-    [Range(0,1)]
+    [Range(0, 1)]
     public float aiTemperature;
 
-    [Header("文本颜色")]
-    public Color textColor;
-    public float textFlashDuration;
+    private string judgePrompt;
+    private string npcPrompt;
 
     // 定义一个枚举来表示不同的模型选项
     public enum AvailableModels
@@ -59,10 +57,10 @@ public class DeepseekRespon : MonoBehaviour
         {
             if (gameScenario != null)
             {
-                _initialPrompt = puzzleScenario.GenerateJudgerPromptJSON();//gameScenario.returnFullPrompt();
-                initialRequirement = puzzleScenario.GenerateJudgerPromptJSON()+"如果你了解了，就回复\"是\"";
+                _initialPrompt = gameScenario.returnFullPrompt();
+                initialRequirement = gameScenario.returnFullRequest();
             }
-               
+
             InitialSendTextToAPI();
             isdone = !isdone;
             Debug.Log("已经完成初始化");
@@ -287,7 +285,6 @@ public class DeepseekRespon : MonoBehaviour
         }
     }
 
-    private Coroutine flashCor;
     // 处理 API 响应结果
     private void ProcessResponse(string responseBody)
     {
@@ -299,11 +296,6 @@ public class DeepseekRespon : MonoBehaviour
                 var response = JsonConvert.DeserializeObject<ResponseData>(responseBody);
                 // 将响应内容显示在输出文本框中
                 outputText.text = response.choices[0].message.content;
-                if (flashCor != null)
-                {
-                    StopCoroutine(flashCor);
-                }
-                flashCor = StartCoroutine(TextColorFlashCoroutine(outputText, textColor, Color.white, textFlashDuration)); // 颜色可调整
             }
             catch (JsonException e)
             {
@@ -313,31 +305,45 @@ public class DeepseekRespon : MonoBehaviour
         }
     }
 
-    private IEnumerator TextColorFlashCoroutine(Text textComponent, Color startColor, Color midColor, float duration)
+
+    
+    public async void SendToJudger(string userInput)
     {
-        float halfTime = duration / 2f;
-        float t = 0f;
-
-        // 初始色 → 白色
-        while (t < halfTime)
-        {
-            t += Time.deltaTime;
-            textComponent.color = Color.Lerp(startColor, midColor, t / halfTime);
-            yield return null;
-        }
-
-        t = 0f;
-
-        // 白色 → 初始色
-        while (t < halfTime)
-        {
-            t += Time.deltaTime;
-            textComponent.color = Color.Lerp(midColor, startColor, t / halfTime);
-            yield return null;
-        }
-
-        textComponent.color = startColor; // 确保最终回到起始颜色
+        string requestBody = PrepareRequestBody(userInput, "user", _initialPrompt);
+        string responseBody = await CallAPI(requestBody);
+        ProcessResponse(responseBody);
     }
+
+    public async void SendToNPC(string userInput)
+    {
+        string requestBody = PrepareRequestBody(userInput, "user", npcPrompt);
+        string responseBody = await CallAPI(requestBody);
+        ProcessResponse(responseBody);
+    }
+
+    private string PrepareRequestBody(string input, string role, string systemPrompt)
+    {
+        string modelName = GetModelNameFromEnum(selectedModel);
+        var request = new
+        {
+            model = modelName,
+            stream = false,
+            max_tokens = 512,
+            temperature = aiTemperature,
+            top_p = 0.7,
+            top_k = 50,
+            frequency_penalty = 0.5,
+            n = 1,
+            stop = new string[] { },
+            messages = new[]
+            {
+            new { role = "system", content = systemPrompt },
+            new { role = role, content = input }
+        }
+        };
+        return JsonConvert.SerializeObject(request);
+    }
+
     // 定义响应数据的结构
     private class ResponseData
     {

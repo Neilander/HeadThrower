@@ -59,6 +59,27 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
+
+    public void SwitchAllActionStage(bool ifEnable)
+    {
+        if (ifEnable)
+        {
+            //mousePositionAction.Enable();
+            //mouseAction.Enable();
+            //eKeyAction.Enable();
+            //inputControl.Enable();
+            canMove = true;
+
+        }
+        else
+        {
+            //mousePositionAction.Disable();
+            //mouseAction.Disable();
+            //eKeyAction.Disable();
+            //inputControl.Disable();
+            canMove = false;
+        }
+    }
     void Update()
     {
         //状态机更新

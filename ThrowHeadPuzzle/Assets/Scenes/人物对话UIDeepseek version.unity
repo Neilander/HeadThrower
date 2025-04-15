@@ -284,6 +284,10 @@ MonoBehaviour:
   aiName: AI Narrator
   playerName: Player
   gameScenario: {fileID: 11400000, guid: 60ac6797c5c3245aebcf5709b3f15669, type: 2}
+  puzzleScenario: {fileID: 11400000, guid: b6cdd4f0aaf5f43ef932b4b5fd43614f, type: 2}
+  aiTemperature: 0.303
+  textColor: {r: 0.3254902, g: 0.38431373, b: 0.44313726, a: 1}
+  textFlashDuration: 0.5
   selectedModel: 1
 --- !u!114 &161086595
 MonoBehaviour:

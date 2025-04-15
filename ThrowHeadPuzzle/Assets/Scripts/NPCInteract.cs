@@ -10,6 +10,10 @@ public class NPCInteract : BaseInteraction
 
     [SerializeField]
     bool playerInArea;
+
+    private bool isLoaded = false;
+
+    private GameObject player;
     // public string sceneToLoad;
 
     void OnTriggerEnter2D(Collider2D collision)
@@ -17,6 +21,7 @@ public class NPCInteract : BaseInteraction
         if (collision.CompareTag("Player"))
         {
             _keyboolSO.RaiseEvent(true);
+            player = collision.gameObject;
             playerInArea = true;
         }
     }
@@ -32,16 +37,31 @@ public class NPCInteract : BaseInteraction
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E) && playerInArea)
+        if (Input.GetKeyDown(KeyCode.E) && playerInArea&& !isLoaded)
         {
-            OnInteract(new InteractionSignal(gameObject, InteractionType.KeyPress));
+            OnInteract(new InteractionSignal(player, InteractionType.KeyPress));
+            //Debug.Log("来");
+            isLoaded = true;
+           
         }
     }
 
     public override bool OnInteract(InteractionSignal signal)
     {
+        player.GetComponent<PlayerController>().SwitchAllActionStage(false);
         LoadUIScene();
+        _UIboolSO._boolvalue += OnRaiseEvent;
         return true;
+    }
+
+    public void OnRaiseEvent(bool ifOpen)
+    {
+        if (!ifOpen)
+        {
+            isLoaded = false;
+            player.GetComponent<PlayerController>().SwitchAllActionStage(true);
+            _UIboolSO._boolvalue -= OnRaiseEvent;
+        }
     }
 
     private void LoadUIScene()
