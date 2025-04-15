@@ -26,6 +26,9 @@ public class DeepseekRespon : MonoBehaviour
     string playerName = "Player";
     bool isdone = false;
 
+    [Header("传入的场景")]
+    public AIDialogueScenario gameScenario;
+
     // 定义一个枚举来表示不同的模型选项
     public enum AvailableModels
     {
@@ -45,8 +48,15 @@ public class DeepseekRespon : MonoBehaviour
     {
         if (!isdone)
         {
+            if (gameScenario != null)
+            {
+                _initialPrompt = gameScenario.returnFullPrompt();
+                initialRequirement = gameScenario.returnFullRequest();
+            }
+               
             InitialSendTextToAPI();
             isdone = !isdone;
+            Debug.Log("已经完成初始化");
         }
     }
 
