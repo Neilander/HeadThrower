@@ -27,7 +27,7 @@ public class GetItemData : MonoBehaviour
         //     Debug.Log($"Name: {shield.name}, ID: {shield.id}, Description: {shield.description}");
         //     tmpText.text = $"Description: {shield.description}";
         // }
-        GetData("Sword");
+        GetData("StoryBook");
     }
 
     //TODO：未初始化  =>  需要在enable里获取一下DeliverStringSO _item;的数据，用于读取

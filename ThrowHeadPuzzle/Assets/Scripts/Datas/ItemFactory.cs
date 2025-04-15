@@ -39,13 +39,18 @@ public class ItemFactory : MonoBehaviour
     {
         Item sword = new Item("Sword", 1, "A sharp sword for combat.",swordImage);
         Item shield = new Item("Shield", 2, "A sturdy shield for defense.",shieldImage);
+        Item storyIntro = new Item("StoryBook", 3, "我叫林哲，我的邻居好像搬家了，走前也没和我说一声，" +
+            "新邻居家里有个小孩，老是用怪异的眼神看着我，还说着让我赶紧滚出这里的疯话，新邻居说这孩子有点心理问题我也就没放在心上。" +
+            "我家的狗最近总是不见踪影，可能是去和隔壁小孩玩了吧。最近邻居好像都知道我得重感冒了，都离我家远远的，过了几天，我被捕了。为什么？", swordImage);
 
         // 将物品添加到字典中
         itemDictionaryByName[sword.name] = sword;
         itemDictionaryByName[shield.name] = shield;
+        itemDictionaryByName[storyIntro.name] = storyIntro;
 
         itemDictionaryById[sword.id] = sword;
         itemDictionaryById[shield.id] = shield;
+        itemDictionaryById[storyIntro.id] = storyIntro;
     }
 
     // 根据物品名称获取物品信息的方法

@@ -58,6 +58,8 @@ public class PlayerController : MonoBehaviour
                 rbController = child.GetComponent<RigidbodyController>();
             }
         }
+
+        Screen.SetResolution(1920, 1080,FullScreenMode.FullScreenWindow);
     }
 
     public void SwitchAllActionStage(bool ifEnable)

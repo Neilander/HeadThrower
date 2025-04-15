@@ -470,6 +470,7 @@ GameObject:
   - component: {fileID: 706274998}
   - component: {fileID: 706275000}
   - component: {fileID: 706274999}
+  - component: {fileID: 706275001}
   m_Layer: 0
   m_Name: ItemDataManager
   m_TagString: Untagged
@@ -521,6 +522,20 @@ MonoBehaviour:
   tmpText: {fileID: 1023302178}
   itemFactory: {fileID: 706274999}
   _item: {fileID: 11400000, guid: 7608f5c873420384aaa1e8c2de112dfa, type: 2}
+--- !u!114 &706275001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 706274997}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 983cf84a6322c0b458000e4fb372048b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _UIboolSO: {fileID: 11400000, guid: 090656292496cae4fba628aef613d550, type: 2}
+  menu_transform: {fileID: 61001573}
 --- !u!1001 &845451685
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -770,6 +785,14 @@ PrefabInstance:
         XD
 
         XD'
+      objectReference: {fileID: 0}
+    - target: {fileID: 7812004935497365299, guid: a68f44190e843fc498d9db9b69b56081, type: 3}
+      propertyPath: m_FontData.m_MinSize
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7812004935497365299, guid: a68f44190e843fc498d9db9b69b56081, type: 3}
+      propertyPath: m_FontData.m_FontSize
+      value: 60
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
