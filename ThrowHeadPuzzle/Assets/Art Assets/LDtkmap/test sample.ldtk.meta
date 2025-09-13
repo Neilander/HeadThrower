@@ -31,11 +31,11 @@ ScriptedImporter:
   - _key: Function
     _asset: {fileID: 951587123520760349, guid: fe565f1bac3f82a4cbcce08c2ca70a35, type: 3}
   - _key: Goal
-    _asset: {instanceID: 0}
+    _asset: {fileID: 1527685738784506312, guid: ad89b13ba5425ce40acdc674e34f6dbe, type: 3}
   - _key: Trap
-    _asset: {instanceID: 0}
+    _asset: {fileID: 6671767169951944544, guid: f6de5b7b785866a4598d9210afd4e1da, type: 3}
   - _key: Broke_switch
-    _asset: {instanceID: 0}
+    _asset: {fileID: 5778861198870590457, guid: 11545a8579e673947b6572fdf42cce2d, type: 3}
   _enumGenerate: 0
   _enumPath: 
   _enumNamespace: 
