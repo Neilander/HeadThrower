@@ -46,7 +46,7 @@ public class AdjustCamera : MonoBehaviour
             Mathf.Abs(viewportPoint.x - 0.5f) * 1f, // 水平方向距离
             Mathf.Abs(viewportPoint.y - 0.5f) * 1f // 垂直方向距离
         );
-        Debug.Log(distanceToEdge);
+        //        Debug.Log(distanceToEdge);
         if (distanceToEdge > edgeThreshold)
         {
             IncreaseOrthoSize();

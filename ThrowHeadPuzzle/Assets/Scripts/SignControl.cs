@@ -3,12 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public class SignControl : MonoBehaviour
 {
     public Transform player;
     public Vector3 偏移;
-    [SerializeField] SpriteRenderer spriteRenderer;
+
+    [SerializeField]
+    SpriteRenderer spriteRenderer;
+
     //[SerializeField] SpriteRenderer spriteRendererQ;
     public DeliverBoolSO _boolSO;
     public DeliverTransformSO transformSO;
@@ -17,7 +19,6 @@ public class SignControl : MonoBehaviour
     {
         spriteRenderer = transform.GetComponent<SpriteRenderer>();
         transformSO.RaiseEvent(transform);
-
     }
 
     private void OnEnable()
@@ -34,6 +35,7 @@ public class SignControl : MonoBehaviour
     {
         spriteRenderer.enabled = _bool;
     }
+
     void Update()
     {
         transform.position = player.transform.position + 偏移;

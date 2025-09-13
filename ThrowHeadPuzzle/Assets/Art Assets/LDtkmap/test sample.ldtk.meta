@@ -36,6 +36,8 @@ ScriptedImporter:
     _asset: {fileID: 6671767169951944544, guid: f6de5b7b785866a4598d9210afd4e1da, type: 3}
   - _key: Broke_switch
     _asset: {fileID: 5778861198870590457, guid: 11545a8579e673947b6572fdf42cce2d, type: 3}
+  - _key: Start
+    _asset: {fileID: 5249567248780987928, guid: c5d6ff75621be8c4ea1a1e371eb6079e, type: 3}
   _enumGenerate: 0
   _enumPath: 
   _enumNamespace: 
