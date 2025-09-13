@@ -3,6 +3,10 @@ using UnityEngine;
 public class LevelTeleporter : MonoBehaviour
 {
     // ========== 在Unity编辑器中可设置的参数 ==========
+
+    [Tooltip("传送时的位置偏移量\n" + "例如：(0, 0.5, 0) 会在目标位置上方0.5单位传送")]
+    public Vector3 positionOffset = Vector3.zero;
+
     [Header("传送设置")]
     [Tooltip("要传送到的关卡编号（1,2,3...）")]
     public int 目标关卡 = 1; // 这个传送门会传送到哪个关卡
@@ -70,10 +74,10 @@ public class LevelTeleporter : MonoBehaviour
         }
 
         // 执行传送玩家到指定位置
-        TeleportPlayer(levelInfo.startPosition);
+        TeleportPlayer(levelInfo.spawnPosition);
 
         // 显示成功信息
-        Debug.Log($"已传送到关卡 {目标关卡} - {levelInfo.levelName}");
+        //Debug.Log($"已传送到关卡 {目标关卡} - {levelInfo.levelName}");
     }
 
     // ========== 实际的传送逻辑 ==========
@@ -90,7 +94,11 @@ public class LevelTeleporter : MonoBehaviour
             float currentZ = player.transform.position.z;
 
             // 设置新位置，保持z坐标不变
-            player.transform.position = new Vector3(position.x, position.y, currentZ);
+            player.transform.position = new Vector3(
+                position.x + positionOffset.x,
+                position.y + positionOffset.y,
+                currentZ
+            );
             // 可选：添加传送特效或声音
             // Instantiate(teleportEffect, position, Quaternion.identity);
             // AudioManager.PlaySound("TeleportSound");
