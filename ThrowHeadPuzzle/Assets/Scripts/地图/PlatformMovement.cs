@@ -6,58 +6,59 @@ using UnityEngine.InputSystem;
 public class PlatformMovement : BaseInteraction
 {
     private WorldMover mover;
-    [SerializeField]
 
+    [SerializeField]
     private bool isMoving = false;
-    [SerializeField]
 
+    [SerializeField]
     private Transform playerTransform;
-    [SerializeField]
 
+    [SerializeField]
     private bool playerOnPlatform = false;
+
     [SerializeField]
     public DeliverBoolSO QsignboolSO;
 
     public DeliverTransformSO QsignSO;
-    public Transform Qsign;
-
+    //public Transform Qsign;
 
     [SerializeField]
     private Transform pos1;
+
     [SerializeField]
     private Transform pos2;
 
     private bool isPos1 = true;
     private Vector3 lastPlatformPosition; // 记录平台上一帧的位置
 
-
     private void Awake()
     {
         mover = GetComponent<WorldMover>();
-
     }
+
     private void OnEnable()
     {
-        // 尝试在未触发事件时读取最新的 Transform 值
-        Transform receivedTransform = QsignSO.GetLatestTransform();
-        if (receivedTransform != null)
-        {
-            HandleTransformReceived(receivedTransform);
-        }
-        else
-        {
-            // 如果还未存储 Transform 值，订阅事件
-            QsignSO._transform += HandleTransformReceived;
-        }
-        // // 订阅 _transform 事件
-        // QsignSO._transform += HandleTransformReceived;
+        // // 尝试在未触发事件时读取最新的 Transform 值
+        // Transform receivedTransform = QsignSO.GetLatestTransform();
+        // if (receivedTransform != null)
+        // {
+        //     HandleTransformReceived(receivedTransform);
+        // }
+        // else
+        // {
+        //     // 如果还未存储 Transform 值，订阅事件
+        //     QsignSO._transform += HandleTransformReceived;
+        // }
+        // // // 订阅 _transform 事件
+        // // QsignSO._transform += HandleTransformReceived;
     }
 
     private void OnDisable()
     {
         // 取消订阅 _transform 事件，防止内存泄漏
-        QsignSO._transform -= HandleTransformReceived;
+        //QsignSO._transform -= HandleTransformReceived;
     }
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
@@ -72,7 +73,7 @@ public class PlatformMovement : BaseInteraction
     {
         if (other.CompareTag("Player"))
         {
-            Qsign.GetComponent<SpriteRenderer>().enabled = false;
+            //Qsign.GetComponent<SpriteRenderer>().enabled = false;
 
             playerOnPlatform = false;
             playerTransform = null;
@@ -83,10 +84,7 @@ public class PlatformMovement : BaseInteraction
 
     private void OnTriggerStay2D(Collider2D other)
     {
-        if (other.CompareTag("Player"))
-        {
-
-        }
+        if (other.CompareTag("Player")) { }
     }
 
     private void Update()
@@ -94,7 +92,6 @@ public class PlatformMovement : BaseInteraction
         float platformXMovement = transform.position.x - lastPlatformPosition.x;
         if (playerOnPlatform)
         {
-
             if (playerTransform != null)
             {
                 if (Input.GetKeyDown(KeyCode.Q))
@@ -103,13 +100,13 @@ public class PlatformMovement : BaseInteraction
                     OnInteract(new InteractionSignal(gameObject, InteractionType.KeyPress));
                 }
 
-                // 让玩家跟随平台移动                
-                playerTransform.position =
-                new Vector3(playerTransform.position.x + platformXMovement,
-                playerTransform.position.y,
-                playerTransform.position.z);
+                // 让玩家跟随平台移动
+                playerTransform.position = new Vector3(
+                    playerTransform.position.x + platformXMovement,
+                    playerTransform.position.y,
+                    playerTransform.position.z
+                );
             }
-
         }
         // 更新平台上一帧的位置
         lastPlatformPosition = transform.position;
@@ -123,7 +120,7 @@ public class PlatformMovement : BaseInteraction
     {
         Debug.Log("Received Transform: " + receivedTransform.name);
         // 在这里进行其他操作
-        Qsign = receivedTransform;
+        //Qsign = receivedTransform;
     }
 
     public override bool OnInteract(InteractionSignal signal)

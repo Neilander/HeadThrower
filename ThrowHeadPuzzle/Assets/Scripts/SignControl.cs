@@ -13,12 +13,12 @@ public class SignControl : MonoBehaviour
 
     //[SerializeField] SpriteRenderer spriteRendererQ;
     public DeliverBoolSO _boolSO;
-    public DeliverTransformSO transformSO;
+    //public DeliverTransformSO transformSO;
 
     void Awake()
     {
         spriteRenderer = transform.GetComponent<SpriteRenderer>();
-        transformSO.RaiseEvent(transform);
+        //transformSO.RaiseEvent(transform);
     }
 
     private void OnEnable()

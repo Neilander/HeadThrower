@@ -143,6 +143,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f999fd351d69cb408b93ba0be1a046d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  positionOffset: {x: 0, y: 0, z: 0}
   "\u76EE\u6807\u5173\u5361": 1
   interactKey: 116
   levelData: {fileID: 11400000, guid: 57d1347d681014f478f24fd37f1bbfb4, type: 2}
+  TSignBoolSO: {fileID: 11400000, guid: 1df44369abcd1b5449c143155b4c1933, type: 2}

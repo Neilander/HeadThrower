@@ -18,6 +18,9 @@ public class LevelTeleporter : MonoBehaviour
     [Tooltip("拖拽这里分配创建好的LevelDataSO文件")]
     public LevelDataSO levelData; // 引用上面创建的关卡数据文件
 
+    [Header("按键提示文件")]
+    public DeliverBoolSO TSignBoolSO;
+
     // ========== 私有变量（不在编辑器中显示） ==========
     private bool playerInRange = false; // 记录玩家是否在传送门范围内
 
@@ -31,6 +34,7 @@ public class LevelTeleporter : MonoBehaviour
         {
             playerInRange = true; // 标记玩家在范围内
             Debug.Log($"按 {interactKey} 键进入关卡 {目标关卡}");
+            TSignBoolSO.RaiseEvent(true); //显示按键提示
         }
     }
 
@@ -40,6 +44,7 @@ public class LevelTeleporter : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             playerInRange = false; // 标记玩家离开范围
+            TSignBoolSO.RaiseEvent(false); //隐藏按键提示
         }
     }
 
