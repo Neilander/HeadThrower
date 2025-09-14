@@ -73,4 +73,8 @@ public class WorldMover : MonoBehaviour
                 onMoveReachs[triggerIndex]?.Invoke();
         }
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> Lxy_add_GPT
