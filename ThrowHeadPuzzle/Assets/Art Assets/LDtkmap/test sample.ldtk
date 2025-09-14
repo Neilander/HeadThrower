@@ -1943,6 +1943,22 @@
 							"fieldInstances": [],
 							"__worldX": 528,
 							"__worldY": 160
+						},
+						{
+							"__identifier": "ItemTest",
+							"__grid": [19,9],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#24BFC3",
+							"iid": "c0523910-8560-11f0-b36c-bffc3861dd43",
+							"width": 16,
+							"height": 16,
+							"defUid": 7,
+							"px": [304,144],
+							"fieldInstances": [],
+							"__worldX": 816,
+							"__worldY": 144
 						}
 					]
 				},

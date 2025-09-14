@@ -6,38 +6,93 @@ using UnityEngine.UI;
 
 public class GetItemData : MonoBehaviour
 {
-    public Text tmpText; // 引用 Text 组件
-    public ItemFactory itemFactory;
-    public DeliverStringSO _item;
+    public Text tmpText_name; // 引用 Text 组件
+    public Text tmpText_discription; // 引用 Text 组件
 
+    [SerializeField]
+    private int itemID = 0;
+
+    [Header("数据引用")]
+    public DeliverStringSO deliverStringSO;
+    public DeliverBoolSO isShowed;
+    private string itemDiscription;
+
+    [Header("物品ID传递")]
+    [Tooltip("跨场景传送物品ID数据的文件")]
+    public DeliverintSO _UIintSO;
 
     void Start()
     {
-        // // 根据名称获取物品信息
-        // Item sword = itemFactory.GetItemByName("Sword");
-        // if (sword != null)
-        // {
-        //     Debug.Log($"Name: {sword.name}, ID: {sword.id}, Description: {sword.description}");
-        // }
+        //GetData("Sword");
 
-        // // 根据编号获取物品信息
-        // Item shield = itemFactory.GetItemById(2);
-        // if (shield != null)
-        // {
-        //     Debug.Log($"Name: {shield.name}, ID: {shield.id}, Description: {shield.description}");
-        //     tmpText.text = $"Description: {shield.description}";
-        // }
-        GetData("Sword");
+        //DisplayObjectInfo();
     }
 
-    //TODO：未初始化  =>  需要在enable里获取一下DeliverStringSO _item;的数据，用于读取
-
-    public void GetData(string item)
+    private void OnEnable()
     {
-        Item _tempItem = itemFactory.GetItemByName(item);
-        if (_tempItem != null)
-            tmpText.text = $"{_tempItem.name}: {_tempItem.description}";
-        else
-            tmpText.text = $"error";
+        _UIintSO._intvalue += DeliverItemID;
+        isShowed._boolvalue += DisplayObjectInfo;
     }
+
+    private void OnDisable()
+    {
+        _UIintSO._intvalue -= DeliverItemID;
+        isShowed._boolvalue -= DisplayObjectInfo;
+    }
+
+    private void DeliverItemID(int _int)
+    {
+        itemID = _int;
+        //Debug.Log(itemID);
+    }
+
+    void DisplayObjectInfo(bool _bool)
+    {
+        //Debug.Log(2);
+
+        if (deliverStringSO == null)
+        {
+            Debug.LogError("DeliverStringSO 未分配！");
+            return;
+        }
+
+        // 方法1：通过名称获取描述
+        // string description = deliverStringSO.GetDescriptionByName(objectName);
+        // Debug.Log($"{objectName} 的描述: {description}");
+
+        // 方法2：通过ID获取描述
+
+        string description = deliverStringSO.GetDescriptionByID(itemID);
+        tmpText_discription.text = description;
+        string _name = deliverStringSO.GetNameByID(itemID);
+        tmpText_name.text = _name;
+        //Debug.Log($"ID {itemID} 的描述: {description}");
+
+        // 方法3：获取完整数据
+        // DeliverStringSO.ObjectData data = deliverStringSO.GetObjectDataByName(objectName);
+        // if (data != null)
+        // {
+        //     Debug.Log($"名称: {data.objectName}");
+        //     Debug.Log($"描述: {data.description}");
+        //     Debug.Log($"类型: {data.objectType}");
+        //     Debug.Log($"价值: {data.value}");
+
+        //     // 可以使用 data.objectSprite 来设置UI图像等
+        // }
+    }
+
+    // void Update()
+    // {
+    //     if (1)
+    //         return;
+    // }
+
+    // public void GetData(string item)
+    // {
+    //     Item _tempItem = itemFactory.GetItemByName(item);
+    //     if (_tempItem != null)
+    //         tmpText.text = $"{_tempItem.name}: {_tempItem.description}";
+    //     else
+    //         tmpText.text = $"error";
+    // }
 }

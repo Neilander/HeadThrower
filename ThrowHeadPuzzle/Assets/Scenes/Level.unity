@@ -178,6 +178,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: -7511725357491898322, guid: a6e1bdf63b7effc419f74ed972fba8e8, type: 3}
+      propertyPath: ItemID
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: -6821878524906932432, guid: a6e1bdf63b7effc419f74ed972fba8e8, type: 3}
       propertyPath: m_Name
       value: test sample
@@ -2482,6 +2486,14 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 14.44
       objectReference: {fileID: 0}
+    - target: {fileID: 2739818175573076200, guid: a6e1bdf63b7effc419f74ed972fba8e8, type: 3}
+      propertyPath: ItemID
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2739818175573076200, guid: a6e1bdf63b7effc419f74ed972fba8e8, type: 3}
+      propertyPath: _UIintSO
+      value: 
+      objectReference: {fileID: 11400000, guid: 152e2df79046fd548bf07c8777b7e895, type: 2}
     - target: {fileID: 3274903491771587218, guid: a6e1bdf63b7effc419f74ed972fba8e8, type: 3}
       propertyPath: m_Layer
       value: 6
