@@ -8,7 +8,6 @@ public class HitPlat : MonoBehaviour
     public Sprite offSprite;
     public Sprite onSprite;
 
-
     private SpriteRenderer rend;
 
     void Awake()
@@ -18,11 +17,12 @@ public class HitPlat : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        //Debug.Log(1);
+        Debug.Log("Bullet hitted");
         if (other.tag != "Bullet")
             return;
 
-        ChangeSprite();
+        //ChangeSprite();
+        Destroy(gameObject);
     }
 
     void ChangeSprite()

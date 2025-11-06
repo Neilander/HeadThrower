@@ -458,11 +458,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 383236831}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 999af92033cfe4c48a6665913443baac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetSceneName: Level
 --- !u!1 &397679975
 GameObject:
   m_ObjectHideFlags: 0
@@ -4298,8 +4299,8 @@ CapsuleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.10140336, y: 0.045103867}
-  m_Size: {x: 2.198141, y: 0.48791414}
+  m_Offset: {x: -0.10140336, y: 0.05135398}
+  m_Size: {x: 2.1981413, y: 0.4754157}
   m_Direction: 1
 --- !u!114 &664284581
 MonoBehaviour:
@@ -4324,7 +4325,7 @@ CapsuleCollider2D:
   m_GameObject: {fileID: 664284579}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 6200000, guid: e550e6d7872914a4fa7bb8a1d7399dcb, type: 2}
+  m_Material: {fileID: 6200000, guid: 07023fc930f977c40a4500b81d6df9f6, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -4347,8 +4348,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.14355256, y: 0.043415494}
-  m_Size: {x: 0.5389417, y: 0.49309763}
+  m_Offset: {x: -0.1435522, y: -0.09173643}
+  m_Size: {x: 0.76340455, y: 0.76340455}
   m_Direction: 1
 --- !u!212 &664284583
 SpriteRenderer:
@@ -4452,7 +4453,7 @@ MonoBehaviour:
   bullet: {fileID: 1640893168259006159, guid: d573346eef1adf64fab2332eaf59c96a, type: 3}
   curbullet: {fileID: 0}
   "\u67AA\u68B0\u671D\u5411": {x: 0, y: 0}
-  "\u521D\u59CB\u4F4D\u7F6E": {x: 0, y: 0.15}
+  "\u521D\u59CB\u4F4D\u7F6E": {x: 1.72, y: 0.21}
   "\u521D\u59CB\u89D2\u5EA6": {x: 0, y: 0, z: 0}
 --- !u!1 &808960249
 GameObject:
@@ -5628,6 +5629,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 999af92033cfe4c48a6665913443baac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetSceneName: Level
 --- !u!1 &1414252397
 GameObject:
   m_ObjectHideFlags: 0
@@ -5812,7 +5814,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   virtualCamera: {fileID: 1418689546}
   "\u4EBA\u7269_\u8EAB\u4F53": {fileID: 1390444222}
-  adjustmentSpeed: 12
+  adjustmentSpeed: 30.1
   maxOrthoSize: 8
   minOrthoSize: 6
   changeVelocity: 0
@@ -5878,7 +5880,7 @@ Transform:
   m_GameObject: {fileID: 1528819611}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 23.72, y: 4.28, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -6963,6 +6965,10 @@ PrefabInstance:
     - target: {fileID: 1640893168259006159, guid: d573346eef1adf64fab2332eaf59c96a, type: 3}
       propertyPath: m_Name
       value: bullet
+      objectReference: {fileID: 0}
+    - target: {fileID: 1640893168259006159, guid: d573346eef1adf64fab2332eaf59c96a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8264879247531777637, guid: d573346eef1adf64fab2332eaf59c96a, type: 3}
       propertyPath: bullet_speed
