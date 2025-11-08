@@ -244,6 +244,7 @@ GameObject:
   m_Component:
   - component: {fileID: 134975873}
   - component: {fileID: 134975874}
+  - component: {fileID: 134975875}
   m_Layer: 7
   m_Name: "\u4E0B\u534A\u8EAB"
   m_TagString: Untagged
@@ -260,8 +261,8 @@ Transform:
   m_GameObject: {fileID: 134975872}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.102, y: 0.802, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -0.1, y: -0.41, z: 0}
+  m_LocalScale: {x: -1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1390444222}
@@ -307,17 +308,38 @@ SpriteRenderer:
   m_SortingLayerID: 704163381
   m_SortingLayer: 3
   m_SortingOrder: 0
-  m_Sprite: {fileID: 1906852835, guid: 934fcbf4e132f8444ab6ba5a4b1453e1, type: 3}
+  m_Sprite: {fileID: 21300000, guid: fd5320d91d046e34c895407bec10f61e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.56, y: 0.56}
+  m_Size: {x: 4.96, y: 7.2}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!95 &134975875
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 134975872}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: f3347ed733ba6c740af8c1e74190b3e9, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!19719996 &210393623 stripped
 TilemapCollider2D:
   m_CorrespondingSourceObject: {fileID: -6527159314358725049, guid: a6e1bdf63b7effc419f74ed972fba8e8, type: 3}
@@ -5624,12 +5646,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1390444220}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 999af92033cfe4c48a6665913443baac, type: 3}
+  m_Script: {fileID: 11500000, guid: 82985fcb498f69044b47036236d5c4a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetSceneName: Level
+  "\u73A9\u5BB6\u52A8\u753B\u63A7\u5236\u5668": {fileID: 134975875}
+  rb: {fileID: 1390444223}
 --- !u!1 &1414252397
 GameObject:
   m_ObjectHideFlags: 0
@@ -6205,7 +6228,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1616250812
 Transform:
   m_ObjectHideFlags: 0
