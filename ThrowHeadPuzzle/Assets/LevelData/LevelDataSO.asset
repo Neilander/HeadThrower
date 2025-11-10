@@ -23,5 +23,13 @@ MonoBehaviour:
     sceneName: 
   - levelNumber: 2
     levelName: "\u6D4B\u8BD5\u5173\u53612"
-    spawnPosition: {x: 0, y: 0, z: 0}
+    spawnPosition: {x: 30.73, y: -12.3, z: 0}
+    sceneName: 
+  - levelNumber: 3
+    levelName: "\u6D4B\u8BD5\u5173\u53612"
+    spawnPosition: {x: 30.73, y: -12.3, z: 0}
+    sceneName: 
+  - levelNumber: 4
+    levelName: "\u6D4B\u8BD5\u5173\u53612"
+    spawnPosition: {x: 30.73, y: -12.3, z: 0}
     sceneName: 
