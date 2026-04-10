@@ -275,41 +275,16 @@ public class DeepseekRespon : MonoBehaviour
         {
             try
             {
+                // 解析JSON响应
                 var response = JsonConvert.DeserializeObject<ResponseData>(responseBody);
-                
-                if (response?.choices == null || response.choices.Length == 0)
-                {
-                    Debug.LogWarning("API响应中没有choices数据");
-                    return;
-                }
-
-                var choice = response.choices[0];
-                if (choice?.message == null)
-                {
-                    Debug.LogWarning("API响应中没有message数据");
-                    return;
-                }
-
-                if (string.IsNullOrEmpty(choice.message.content))
-                {
-                    Debug.LogWarning("API响应中content为空");
-                    return;
-                }
-
-                outputText.text = choice.message.content;
+                // 将响应内容显示在输出文本框中
+                outputText.text = response.choices[0].message.content;
             }
             catch (JsonException e)
             {
+                // 记录JSON解析错误
                 Debug.Log($"JSON解析错误: {e.Message}");
             }
-            catch (Exception e)
-            {
-                Debug.Log($"处理响应时发生未知错误: {e.Message}");
-            }
-        }
-        else
-        {
-            Debug.LogWarning("API响应体为空");
         }
     }
     // 定义响应数据的结构

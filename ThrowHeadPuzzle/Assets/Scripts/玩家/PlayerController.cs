@@ -26,8 +26,8 @@ public class PlayerController : MonoBehaviour
     public CapsuleCollider2D capsuleCollider;
     public Rigidbody2D rgbody;
     public PhysicCheck physicCheck;
-    [SerializeField] private bool 是否键盘;
-    public int 移动方向状态;//表示人物是正走/倒走状态，1代表正走，-1代表倒走
+    [SerializeField] private bool isKeyboard;
+    public int isMoveForward;//表示人物是正走/倒走状态，1代表正走，-1代表倒走
     public RigidbodyController rbController;
     [SerializeField] Transform ESign;
     #endregion
@@ -65,21 +65,21 @@ public class PlayerController : MonoBehaviour
         UpdateState();
 
         //当人没有头时不改变朝向
-        if (当前状态 == ThrowState.HeadOnBody || 当前状态 == ThrowState.OtherHead || 当前状态 == ThrowState.ThrowAnimation)
+        if (curstate == ThrowState.HeadOnBody || curstate == ThrowState.OtherHead || curstate == ThrowState.ThrowAnimation)
             CheckAndChangeDirection();
         else
         {
-            int 朝向;
+            int faceDirection;
             if (rgbody.velocity.x > 0.6)
             {
-                朝向 = 1;
-                transform.localScale = new Vector3(朝向, 1, 1);
+                faceDirection = 1;
+                transform.localScale = new Vector3(faceDirection, 1, 1);
             }
 
             if (rgbody.velocity.x < -0.6)
             {
-                朝向 = -1;
-                transform.localScale = new Vector3(朝向, 1, 1);
+                faceDirection = -1;
+                transform.localScale = new Vector3(faceDirection, 1, 1);
             }
         }
     }
@@ -95,17 +95,17 @@ public class PlayerController : MonoBehaviour
         {
             //Debug.Log(((InputAction)obj).activeControl.device);
             var cur_device = ((InputAction)obj).activeControl.device;
-            //是否键盘 = false;
+            //isKeyboard = false;
             switch (cur_device)
             {
                 case Keyboard:
-                    是否键盘 = true;
+                    isKeyboard = true;
                     break;
                 case Mouse:
-                    是否键盘 = true;
+                    isKeyboard = true;
                     break;
                 case XInputController:
-                    是否键盘 = false;
+                    isKeyboard = false;
                     break;
             }
         }
@@ -152,12 +152,12 @@ public class PlayerController : MonoBehaviour
     }
 
     [Header("目前状态")]
-    public ThrowState 当前状态 = ThrowState.HeadOnBody;
+    public ThrowState curstate = ThrowState.HeadOnBody;
 
     //外部可以调用的切换状态方法
     public void StartState(ThrowState newState)
     {
-        EndState(当前状态);
+        EndState(curstate);
         switch (newState)
         {
             //执行不同状态的开始行为
@@ -185,7 +185,7 @@ public class PlayerController : MonoBehaviour
 
                 break;
         }
-        当前状态 = newState;
+        curstate = newState;
     }
 
     //内部调用的结束状态方法
@@ -238,7 +238,7 @@ public class PlayerController : MonoBehaviour
     //内部调用的状态Update
     private void UpdateState()
     {
-        switch (当前状态)
+        switch (curstate)
         {
             //执行不同状态的Update，如：
             case ThrowState.HeadOnBody:
@@ -338,7 +338,7 @@ public class PlayerController : MonoBehaviour
     /// <returns></returns>
     public Vector2 GetVectorAim()
     {
-        if (是否键盘)
+        if (isKeyboard)
         {
             // 获取鼠标位置
             Vector2 mouseScreenPos = mousePositionAction.ReadValue<Vector2>();
@@ -358,38 +358,38 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     public void CheckAndChangeDirection()
     {
-        int 朝向 = (int)transform.localScale.x;
-        //Debug.Log(rgbody.velocity.x * 朝向);
-        if (是否键盘)//输入不为手柄时
+        int faceDirection = (int)transform.localScale.x;
+        //Debug.Log(rgbody.velocity.x * faceDirection);
+        if (isKeyboard)//输入不为手柄时
         {
-            朝向 = FacetoMouse() > 0 ? 1 : -1;
-            transform.localScale = new Vector3(朝向, 1, 1);
+            faceDirection = FacetoMouse() > 0 ? 1 : -1;
+            transform.localScale = new Vector3(faceDirection, 1, 1);
             //判断正走/倒走
-            if (rgbody.velocity.x * 朝向 > 0.01)//正走
+            if (rgbody.velocity.x * faceDirection > 0.01)//正走
             {
                 //触发正走的animator
-                移动方向状态 = 1;
+                isMoveForward = 1;
                 //Debug.Log("正走");
             }
-            else if (rgbody.velocity.x * 朝向 < -0.01)
+            else if (rgbody.velocity.x * faceDirection < -0.01)
             {
                 //触发倒走的animator
-                移动方向状态 = -1;
+                isMoveForward = -1;
                 //Debug.Log("倒走");
             }
-            else if (rgbody.velocity.x * 朝向 == 0)
+            else if (rgbody.velocity.x * faceDirection == 0)
             {
-                移动方向状态 = 0;
+                isMoveForward = 0;
                 //Debug.Log("静止");
             }
         }
         else
         {
             if (aimValue_inputControl.x > 0.03)
-                朝向 = 1;
+                faceDirection = 1;
             if (aimValue_inputControl.x < -0.03)
-                朝向 = -1;
-            transform.localScale = new Vector3(朝向, 1, 1);
+                faceDirection = -1;
+            transform.localScale = new Vector3(faceDirection, 1, 1);
         }
     }
     #endregion
