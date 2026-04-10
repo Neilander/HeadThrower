@@ -1,118 +1,112 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class LevelTeleporter : MonoBehaviour
 {
-    #region 公共变量
-    [Tooltip("传送时的位置偏移量\n例如：(0, 0.5, 0) 会在目标位置上方0.5单位传送")]
-    public Vector3 位置偏移 = Vector3.zero;
+    // ========== 在Unity编辑器中可设置的参数 ==========
+
+    [Tooltip("传送时的位置偏移量\n" + "例如：(0, 0.5, 0) 会在目标位置上方0.5单位传送")]
+    public Vector3 positionOffset = Vector3.zero;
 
     [Header("传送设置")]
     [Tooltip("要传送到的关卡编号（1,2,3...）")]
-    public int 目标关卡 = 1;
+    public int 目标关卡 = 1; // 这个传送门会传送到哪个关卡
 
     [Tooltip("与传送门交互的按键")]
-    public KeyCode 交互按键 = KeyCode.E;
+    public KeyCode interactKey = KeyCode.E; // 按哪个键进行传送
 
     [Header("关卡数据")]
     [Tooltip("拖拽这里分配创建好的LevelDataSO文件")]
-    public LevelDataSO 关卡数据;
+    public LevelDataSO levelData; // 引用上面创建的关卡数据文件
 
     [Header("按键提示文件")]
-    public DeliverBoolSO 提示图标布尔;
-    #endregion
+    public DeliverBoolSO TSignBoolSO;
 
-    #region 私有变量
-    private bool 玩家在范围内 = false;
-    private InputControl 输入控制;
-    #endregion
+    // ========== 私有变量（不在编辑器中显示） ==========
+    private bool playerInRange = false; // 记录玩家是否在传送门范围内
 
-    #region 生命周期
+    // ========== 碰撞检测相关方法 ==========
 
-    private void Awake()
+    // 当有其他物体进入这个碰撞器时调用（需要碰撞器设置为Trigger）
+    void OnTriggerEnter2D(Collider2D other)
     {
-        输入控制 = new InputControl();
-    }
-
-    private void OnEnable()
-    {
-        输入控制.Enable();
-    }
-
-    private void OnDisable()
-    {
-        输入控制.Disable();
-    }
-
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        bool 是玩家 = other.CompareTag("Player");
-        if (是玩家)
+        // 检查进入的物体是否是玩家（玩家需要设置Tag为"Player"）
+        if (other.CompareTag("Player"))
         {
-            玩家在范围内 = true;
-            提示图标布尔.RaiseEvent(true);
+            playerInRange = true; // 标记玩家在范围内
+            Debug.Log($"按 {interactKey} 键进入关卡 {目标关卡}");
+            TSignBoolSO.RaiseEvent(true); //显示按键提示
         }
     }
 
-    private void OnTriggerExit2D(Collider2D other)
+    // 当有其他物体离开这个碰撞器时调用
+    void OnTriggerExit2D(Collider2D other)
     {
-        bool 是玩家 = other.CompareTag("Player");
-        if (是玩家)
+        if (other.CompareTag("Player"))
         {
-            玩家在范围内 = false;
-            提示图标布尔.RaiseEvent(false);
+            playerInRange = false; // 标记玩家离开范围
+            TSignBoolSO.RaiseEvent(false); //隐藏按键提示
         }
     }
 
-    private void Update()
+    // ========== 每帧更新的逻辑 ==========
+    void Update()
     {
-        bool 按下交互键 = 输入控制.Player.Interact.triggered;
-        bool 满足条件 = 玩家在范围内 && 按下交互键;
-        
-        if (满足条件)
+        // 如果玩家在范围内且按下了交互键
+        if (playerInRange && Input.GetKeyDown(interactKey))
         {
-            执行传送();
+            TeleportToLevel(); // 执行传送
         }
     }
 
-    #endregion
-
-    #region 传送逻辑
-
-    public void 执行传送()
+    // ========== 传送功能的核心方法 ==========
+    public void TeleportToLevel()
     {
-        bool 有关卡数据 = 关卡数据 != null;
-        if (!有关卡数据)
+        // 安全检查：确保关卡数据已分配
+        if (levelData == null)
         {
-            Debug.LogError("错误：关卡数据未分配！请在Inspector中拖拽分配关卡数据文件");
-            return;
+            Debug.LogError("错误：LevelDataSO 未分配！请在Inspector中拖拽分配关卡数据文件");
+            return; // 退出方法，不执行后面的代码
         }
 
-        var 关卡信息 = 关卡数据.GetLevelInfo(目标关卡);
-        bool 有关卡信息 = 关卡信息 != null;
-        
-        if (!有关卡信息)
+        // 获取目标关卡的信息
+        var levelInfo = levelData.GetLevelInfo(目标关卡);
+
+        // 检查是否找到了关卡数据
+        if (levelInfo == null)
         {
             Debug.LogError($"错误：未找到关卡 {目标关卡} 的数据");
             return;
         }
 
-        传送玩家(关卡信息.spawnPosition);
+        // 执行传送玩家到指定位置
+        TeleportPlayer(levelInfo.spawnPosition);
+
+        // 显示成功信息
+        //Debug.Log($"已传送到关卡 {目标关卡} - {levelInfo.levelName}");
     }
 
-    protected virtual void 传送玩家(Vector2 位置)
+    // ========== 实际的传送逻辑 ==========
+    protected virtual void TeleportPlayer(Vector2 position)
     {
-        GameObject 玩家 = GameObject.FindGameObjectWithTag("Player");
-        bool 有玩家 = 玩家 != null;
-        
-        if (有玩家)
+        // 在场景中查找带有"Player"标签的物体（玩家角色）
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+
+        // 确保找到了玩家物体
+        if (player != null)
         {
-            float 当前Z = 玩家.transform.position.z;
-            玩家.transform.position = new Vector3(
-                位置.x + 位置偏移.x,
-                位置.y + 位置偏移.y,
-                当前Z
+            // 将玩家传送到目标位置
+            // 获取玩家当前的z坐标（保持原有深度）
+            float currentZ = player.transform.position.z;
+
+            // 设置新位置，保持z坐标不变
+            player.transform.position = new Vector3(
+                position.x + positionOffset.x,
+                position.y + positionOffset.y,
+                currentZ
             );
+            // 可选：添加传送特效或声音
+            // Instantiate(teleportEffect, position, Quaternion.identity);
+            // AudioManager.PlaySound("TeleportSound");
         }
         else
         {
@@ -120,16 +114,12 @@ public class LevelTeleporter : MonoBehaviour
         }
     }
 
-    #endregion
-
-    #region 编辑器工具
-
+    // ========== 在Unity编辑器中右键菜单的实用功能 ==========
     [ContextMenu("测试传送功能")]
-    void 测试传送功能()
+    void TestTeleport()
     {
+        // 在编辑模式下测试传送功能
         Debug.Log("测试传送功能...");
-        执行传送();
+        TeleportToLevel();
     }
-
-    #endregion
 }
