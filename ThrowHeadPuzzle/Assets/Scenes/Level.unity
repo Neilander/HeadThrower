@@ -755,6 +755,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: -7258538665951264898, guid: a6e1bdf63b7effc419f74ed972fba8e8, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.53
+      objectReference: {fileID: 0}
     - target: {fileID: -7233718855006226257, guid: a6e1bdf63b7effc419f74ed972fba8e8, type: 3}
       propertyPath: m_Layer
       value: 8
@@ -3103,6 +3107,10 @@ PrefabInstance:
       propertyPath: QsignboolSO
       value: 
       objectReference: {fileID: 11400000, guid: db00b291809604c47a8262d55e9cc94e, type: 2}
+    - target: {fileID: -1199721833961985383, guid: a6e1bdf63b7effc419f74ed972fba8e8, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.55
+      objectReference: {fileID: 0}
     - target: {fileID: -696272855835674572, guid: a6e1bdf63b7effc419f74ed972fba8e8, type: 3}
       propertyPath: QsignSO
       value: 
@@ -3111,6 +3119,14 @@ PrefabInstance:
       propertyPath: QsignboolSO
       value: 
       objectReference: {fileID: 11400000, guid: db00b291809604c47a8262d55e9cc94e, type: 2}
+    - target: {fileID: -587949519791892411, guid: a6e1bdf63b7effc419f74ed972fba8e8, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.55
+      objectReference: {fileID: 0}
+    - target: {fileID: -587949519791892411, guid: a6e1bdf63b7effc419f74ed972fba8e8, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2.38
+      objectReference: {fileID: 0}
     - target: {fileID: -398464084229742099, guid: a6e1bdf63b7effc419f74ed972fba8e8, type: 3}
       propertyPath: m_Layer
       value: 8
@@ -3231,6 +3247,14 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 4098138719959694823, guid: a6e1bdf63b7effc419f74ed972fba8e8, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 9.44
+      objectReference: {fileID: 0}
+    - target: {fileID: 4098138719959694823, guid: a6e1bdf63b7effc419f74ed972fba8e8, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 7.47
+      objectReference: {fileID: 0}
     - target: {fileID: 4620824464169138723, guid: a6e1bdf63b7effc419f74ed972fba8e8, type: 3}
       propertyPath: m_ColliderPaths.Array.size
       value: 1
@@ -3291,6 +3315,14 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: -0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 6290262739418613237, guid: a6e1bdf63b7effc419f74ed972fba8e8, type: 3}
+      propertyPath: QsignSO
+      value: 
+      objectReference: {fileID: 11400000, guid: f3d5c9cb729f9f649a93003553ffbbe3, type: 2}
+    - target: {fileID: 6290262739418613237, guid: a6e1bdf63b7effc419f74ed972fba8e8, type: 3}
+      propertyPath: QsignboolSO
+      value: 
+      objectReference: {fileID: 11400000, guid: db00b291809604c47a8262d55e9cc94e, type: 2}
     - target: {fileID: 6812286477150997594, guid: a6e1bdf63b7effc419f74ed972fba8e8, type: 3}
       propertyPath: m_Layer
       value: 6

@@ -5478,17 +5478,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 335b14806ce3fb44cbfa4b0573b35181, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  value_inputControl: {x: 0, y: 0}
-  aimValue_inputControl: {x: 0, y: 0}
+  "\u79FB\u52A8\u8F93\u5165\u503C": {x: 0, y: 0}
+  "\u7784\u51C6\u8F93\u5165\u503C": {x: 0, y: 0}
   "\u901F\u5EA6": 350
-  "\u8DF3\u8DC3\u9AD8\u5EA6": 7.2
+  "\u8DF3\u8DC3\u9AD8\u5EA6": 7.6
   capsuleCollider: {fileID: 1390444224}
   rgbody: {fileID: 1390444223}
   physicCheck: {fileID: 1390444227}
-  isKeyboard: 0
+  "\u9ED8\u8BA4\u5934\u90E8": {fileID: 664284579}
+  "\u5F53\u524D\u4E3A\u952E\u9F20\u8F93\u5165": 0
   isMoveForward: 0
   rbController: {fileID: 0}
-  ESign: {fileID: 1775876082}
+  "\u4EA4\u4E92\u63D0\u793A\u6807\u8BC6": {fileID: 1775876082}
   canMove: 1
   "\u7A7A\u4E2D\u505C\u6B62\u64CD\u63A7\u7684\u65F6\u95F4": 0.3
   curstate: 0

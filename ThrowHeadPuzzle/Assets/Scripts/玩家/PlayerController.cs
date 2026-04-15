@@ -44,6 +44,7 @@ public class PlayerController : MonoBehaviour
     public CapsuleCollider2D capsuleCollider;
     public Rigidbody2D rgbody;
     public PhysicCheck physicCheck;
+    public GameObject 默认头部;
 
     [SerializeField]
     private bool 当前为键鼠输入;
@@ -290,20 +291,7 @@ public class PlayerController : MonoBehaviour
                 break;
 
             case ThrowState.NoHead:
-                // if (CanPickUp())
-                // {
-                //     //Debug.Log("可以拾取这个Head！");
-                //     SpriteRenderer signRenderer = ESign.GetComponent<SpriteRenderer>();
-                //     signRenderer.enabled = true;  //激活 SpriteRenderer
-                // }
-                // else
-                // {
-                //     SpriteRenderer signRenderer = ESign.GetComponent<SpriteRenderer>();
-                //     signRenderer.enabled = false;  //取消激活 SpriteRenderer
-                // }
-
                 //如果按下E，并且范围里有可以捡起的头，就捡起最近的
-
                 bool E键被触发 = E键输入动作.triggered;
                 if (E键被触发) //按下E或者点击 || mouseAction.triggered
                 {
@@ -567,19 +555,5 @@ public class PlayerController : MonoBehaviour
             _currentTrigger = null;
         }
     }
-
-    // [SerializeField] Vector3 头偏移量;
-    // public void AttachHeads()
-    // {
-    //     RigidbodyController controller = _currentTrigger.GetComponentInParent<RigidbodyController>();
-    //     //移除刚体
-    //     controller.DeAddRGbody();
-    //     //与身体组合，变成子对象
-    //     controller.transform.SetParent(transform);
-    //     //设置正确的位置
-    //     controller.transform.localPosition = 头偏移量;
-    //     controller.transform.eulerAngles = new Vector3(0, 0, 0);
-    //     controller.transform.localScale = new Vector3(1, 1, 1);
-    // }
     #endregion
 }
