@@ -170,10 +170,7 @@ public class PlayerController : MonoBehaviour
         bool 当前允许移动 = canMove;
         if (当前允许移动) //value_inputControl.magnitude != 0 &&
         {
-            rgbody.velocity = new Vector2(
-                移动输入值.x * 速度 * Time.deltaTime,
-                rgbody.velocity.y
-            );
+            rgbody.velocity = new Vector2(移动输入值.x * 速度 * Time.deltaTime, rgbody.velocity.y);
         }
     }
 

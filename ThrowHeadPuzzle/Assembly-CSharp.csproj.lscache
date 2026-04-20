@@ -97,12 +97,15 @@ Assets/MovingPlatformMaker2D/Scripts/
 Assets/Scripts/
  AdjustCamera.cs
  BaseInteraction.cs
+ BulletHitFeedback.cs
  Datas/ItemFactory.cs
  DeepseekRespon.cs
+ EventManager.cs
  GetItemData.cs
  LevelDataEditorTool.cs
  LevelTeleporter.cs
  NPCInteract.cs
+ ParticlesFeedback.cs
  SignControl.cs
  SO/
   DeliverBoolSO.cs
@@ -128,6 +131,11 @@ Assets/Scripts/
   ShootOut.cs
 Assets/
  Settings/InputSystem/InputControl.cs
+ TopDownEngine/
+  Bullet.cs
+  BulletCollision.cs
+  BulletPool.cs
+  CollisionDetector.cs
  相机中心点更新.cs
 Temp/obj/Debug/Assembly-CSharp/.NETStandard,Version=v2.1.AssemblyAttributes.cs
 
@@ -216,6 +224,10 @@ Temp/obj/Debug/Assembly-CSharp/.NETStandard,Version=v2.1.AssemblyAttributes.cs
  UnityEngine.VRModule.dll
  UnityEngine.WindModule.dll
  UnityEngine.XRModule.dll
+../../../../../../Program Files/Unity/Hub/Editor/2022.3.17f1c1/Editor/Data/PlaybackEngines/AndroidPlayer/
+ Unity.Android.Gradle.dll
+ Unity.Android.GradleProject.dll
+ Unity.Android.Types.dll
 ../../../../../../Program Files/Unity/Hub/Editor/2022.3.17f1c1/Editor/Data/UnityReferenceAssemblies/unity-4.8-api/Facades/
  Microsoft.Win32.Primitives.dll
  netstandard.dll

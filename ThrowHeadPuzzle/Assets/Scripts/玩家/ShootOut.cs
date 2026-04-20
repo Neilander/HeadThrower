@@ -1,80 +1,39 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class ShootOut : BaseInteraction
+public class ShootOut : MonoBehaviour
 {
-    [SerializeField]
-    private float bullet_speed;
+    [Header("子弹速度")]
+    public float 子弹速度 = 15f;
 
-    [SerializeField]
-    private float disapper_time = 4.0f;
+    [Header("自动回收时间（秒）")]
+    public float 存活时间 = 1.5f;
 
-    [SerializeField]
-    public bool canShoot = false;
+    private Vector2 _发射方向;
+    private float _计时器;
 
-    [SerializeField]
-    private Rigidbody2D rb; // 引用Rigidbody2D组件
-
-    void Awake()
+    // 接收射击方向
+    public void GetSignal(Vector2 方向)
     {
-        canShoot = false;
+        _发射方向 = 方向.normalized; // 标准化方向（必加，否则不动）
+        _计时器 = 0;
     }
 
-    private void Shoot(InteractionSignal signal)
+    private void Update()
     {
-        // 确保signal.data是方向向量（例如归一化的方向）
-        Vector2 direction = (Vector2)signal.data;
+        // 2D子弹标准移动方式（修复原地不动）
+        transform.Translate(_发射方向 * 子弹速度 * Time.deltaTime, Space.World);
 
-        // 添加强制力（ForceMode2D.Impulse适合瞬间发射，类似子弹初速度）
-        rb.AddForce(direction * bullet_speed, ForceMode2D.Impulse);
-        //transform.localPosition = (Vector2)signal.data * bullet_speed * Time.deltaTime + (Vector2)transform.localPosition;
-        // 启动协程，延迟n秒后销毁物体
-        StartCoroutine(DestroyAfterSeconds(disapper_time));
+        // 计时回收（修复子弹永久存在）
+        _计时器 += Time.deltaTime;
+        if (_计时器 >= 存活时间)
+        {
+            BulletPool.Instance.回收子弹(gameObject);
+        }
     }
 
-    void OnTriggerEnter2D(Collider2D other)
+    // 碰撞后立刻回收
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.tag != "Player")
-            Destroy(gameObject);
-        //ChangeSprite();
-    }
-
-    // void Update()
-    // {
-    //     if (canShoot)
-    //     {
-    //         if (transform.parent != null)
-    //         {
-    //             transform.SetParent(null);
-    //             // 启动协程，延迟n秒后销毁物体
-    //             StartCoroutine(DestroyAfterSeconds(disapper_time));
-    //         }
-
-    //         Shoot(temp_signal);
-    //         //开始一个携程，超过4s以后销毁这个子弹
-    //     }
-    // }
-
-    private InteractionSignal temp_signal;
-
-    public void GetSignal(InteractionSignal signal)
-    {
-        temp_signal = signal;
-        Shoot(temp_signal);
-    }
-
-    /// <summary>
-    /// 协程方法，实现延迟销毁物体的逻辑
-    /// </summary>
-    /// <param name="seconds"></param>
-    /// <returns></returns>
-    IEnumerator DestroyAfterSeconds(float seconds)
-    {
-        // 等待指定的秒数
-        yield return new WaitForSeconds(seconds);
-
-        // 销毁当前游戏对象
-        Destroy(gameObject);
+        BulletPool.Instance.回收子弹(gameObject);
     }
 }
