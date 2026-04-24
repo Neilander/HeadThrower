@@ -11,22 +11,16 @@ public class HeadShoot : BaseInteraction
     private Vector2 初始位置;
     private Vector2 枪械朝向;
 
-    [Header("射击设置")]
-    [SerializeField]
-    private float 射击间隔 = 0.1f; // 连发速度（越小越快）
-    private float 下一次射击时间; // 冷却计时器
-
     void Update()
     {
         bool 头部已分离 = !transform.GetComponent<PickUpHead>().isPickUp;
-        bool 按住射击键 = Input.GetMouseButton(鼠标左键索引);
+        bool 按下射击键 = Input.GetMouseButtonDown(鼠标左键索引);
 
-        if (头部已分离 && 按住射击键 && Time.time >= 下一次射击时间)
+        if (头部已分离 && 按下射击键)
         {
             枪械朝向 = transform.localScale;
             枪械朝向.y = 零值;
             OnInteract(new InteractionSignal(gameObject, InteractionType.KeyPress, 枪械朝向));
-            下一次射击时间 = Time.time + 射击间隔;
         }
         else
         {

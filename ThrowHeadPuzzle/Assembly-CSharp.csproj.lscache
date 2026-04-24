@@ -2,10 +2,12 @@ version=1
 
 # This file caches language service data to improve the performance of C# Dev Kit.
 # It is not intended for manual editing. It can safely be deleted and will be
-# regenerated automatically. For more information, see https://aka.ms/lscache
+# regenerated automatically.
 #
-# To control where cache files are stored, use the following VS Code setting:
-#   "dotnet.projectsystem.cacheInProjectFolder": true
+# To exclude from version control, add *.lscache to your .gitignore file.
+#
+# To disable caching, add the following to your VS Code settings:
+#   "dotnet.projectsystem.enableLanguageServiceCache": false
 
 [project]
 language=C#
@@ -104,7 +106,6 @@ Assets/Scripts/
  LevelTeleporter.cs
  NPCInteract.cs
  ParticlesFeedback.cs
- SectionAttribute.cs
  SignControl.cs
  SO/
   DeliverBoolSO.cs
@@ -135,7 +136,6 @@ Assets/
   BulletCollision.cs
   BulletPool.cs
   CollisionDetector.cs
-  UnityFeedbackPlayer.cs
  相机中心点更新.cs
 Temp/obj/Debug/Assembly-CSharp/.NETStandard,Version=v2.1.AssemblyAttributes.cs
 
@@ -428,7 +428,7 @@ Library/ScriptAssemblies/
 ../../../../../../Program Files/Unity/Hub/Editor/2022.3.17f1c1/Editor/Data/Tools/Unity.SourceGenerators/
  Unity.Properties.SourceGenerator.dll
  Unity.SourceGenerators.dll
-../../../../.vscode/extensions/visualstudiotoolsforunity.vstuc-1.2.2/Analyzers/Microsoft.Unity.Analyzers.dll
+../../../../.vscode/extensions/visualstudiotoolsforunity.vstuc-1.2.1/Analyzers/Microsoft.Unity.Analyzers.dll
 
 [analyzerConfigFiles]
 Temp/obj/Debug/Assembly-CSharp/Assembly-CSharp.GeneratedMSBuildEditorConfig.editorconfig
