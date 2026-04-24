@@ -52,70 +52,16 @@ public class ParticlesFeedback : MonoBehaviour
 
         bool 有绑定粒子 = 绑定粒子 != null;
         bool 需要初始化停止 = 初始化时停止 && 有绑定粒子;
-
-        if (需要初始化停止)
-        {
-            绑定粒子.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
-        }
-
-        已完成初始化 = true;
-        Debug.Log("【粒子反馈】绑定子弹本体成功：" + 子弹本体.name, this);
     }
 
-    private void OnEnable()
-    {
-        // 🔥 核心修复：监听父物体的碰撞事件
-        if (子弹本体 != null)
-        {
-            子弹本体.GetComponent<CollisionDetector>().OnMapCollision += 处理地图碰撞;
-        }
-    }
+    private void OnEnable() { }
 
     private void OnDisable()
     {
         bool 粒子有效 = 当前使用粒子 != null;
         bool 需要禁用停止 = 禁用时停止 && 粒子有效;
 
-        if (需要禁用停止)
-        {
-            当前使用粒子.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
-        }
-
-        // 取消监听
-        if (子弹本体 != null && 子弹本体.GetComponent<CollisionDetector>() != null)
-        {
-            子弹本体.GetComponent<CollisionDetector>().OnMapCollision -= 处理地图碰撞;
-        }
-
         CancelInvoke(nameof(停止粒子发射));
-    }
-
-    // ========== 统一处理地图碰撞 ==========
-    private void 处理地图碰撞(Vector2 碰撞点)
-    {
-        Debug.Log("【粒子反馈】碰撞到地图！播放特效+回收子弹", this);
-
-        // 播放粒子特效
-        播放反馈(碰撞点);
-        // 回收子弹
-        回收子弹();
-    }
-
-    // ========== 回收子弹到子弹池 ==========
-    private void 回收子弹()
-    {
-        bool 子弹池存在 = BulletPool.Instance != null;
-        Debug.Log("【粒子反馈】子弹池是否存在：" + 子弹池存在, this);
-
-        if (子弹池存在)
-        {
-            BulletPool.Instance.回收子弹(子弹本体);
-            Debug.Log("【粒子反馈】子弹已回收", this);
-        }
-        else
-        {
-            Debug.LogError("【粒子反馈】未找到BulletPool单例！", this);
-        }
     }
 
     // ========== 核心对外接口 ==========

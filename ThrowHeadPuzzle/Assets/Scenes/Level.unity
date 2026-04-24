@@ -3379,6 +3379,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: -0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 8321456798673773216, guid: a6e1bdf63b7effc419f74ed972fba8e8, type: 3}
+      propertyPath: _UIintSO
+      value: 
+      objectReference: {fileID: 11400000, guid: 152e2df79046fd548bf07c8777b7e895, type: 2}
     - target: {fileID: 8475802051004008341, guid: a6e1bdf63b7effc419f74ed972fba8e8, type: 3}
       propertyPath: m_Layer
       value: 6

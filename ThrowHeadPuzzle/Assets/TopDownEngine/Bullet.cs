@@ -19,62 +19,45 @@ public class Bullet : MonoBehaviour
 
     // ===================== 中文变量 =====================
     private Rigidbody2D 子弹刚体;
+
+    // 🔥 修复：获取子物体的烟雾拖尾（唯一修改点）
+    [SerializeField]
     private ParticleSystem 烟雾拖尾粒子;
+
+    // 🔥 新增：碰撞冲击粒子
+    [SerializeField]
+    private ParticleSystem 冲击粒子;
 
     // ===================== 初始化 =====================
     private void Awake()
     {
-        子弹刚体 = GetComponent<Rigidbody2D>();
-        // 获取自己的 ParticleSystem
-        烟雾拖尾粒子 = GetComponent<ParticleSystem>();
+        //子弹刚体 = GetComponent<Rigidbody2D>();
     }
 
-    // ===================== 发射子弹 =====================
-    public void 发射子弹(Vector2 飞行方向)
+    public void 播放拖尾特效()
     {
-        Vector2 标准方向 = 飞行方向.normalized;
-        子弹刚体.velocity = 标准方向 * 默认飞行速度;
-
         bool 拖尾存在 = (烟雾拖尾粒子 != null);
         if (拖尾存在)
-            烟雾拖尾粒子.Play();
-
-        Invoke(nameof(回收至对象池), 默认存活时间);
+            烟雾拖尾粒子.Play(); // 🔥 移动时持续播放拖尾
+        else
+        {
+            Debug.LogWarning("【子弹】没有找到拖尾粒子！");
+        }
     }
 
-    // ===================== 碰撞检测（抛出事件） =====================
-    private void OnTriggerEnter2D(Collider2D 碰撞对象)
+    public void 播放冲击特效()
     {
-        bool 击中敌人 = 碰撞对象.CompareTag(敌人标签);
-        bool 击中障碍物 = 碰撞对象.CompareTag(障碍物标签);
-        bool 事件系统可用 = (EventManager.Instance != null);
+        // 核心诊断日志
 
-        // 击中敌人 → 抛事件
-        if (击中敌人 && 事件系统可用)
+        if (冲击粒子 != null)
         {
-            EventManager.Instance.触发事件(事件_命中敌人);
+            冲击粒子.Clear();
+            冲击粒子.transform.position = transform.position;
+            冲击粒子.Play();
         }
-
-        // 击中障碍物 → 抛事件
-        if (击中障碍物 && 事件系统可用)
+        else
         {
-            EventManager.Instance.触发事件(事件_命中障碍物);
+            Debug.LogWarning("【Bullet】冲击粒子为Null，无法播放", this);
         }
-
-        // 回收子弹
-        回收至对象池();
-    }
-
-    // ===================== 回收 =====================
-    private void 回收至对象池()
-    {
-        CancelInvoke();
-        子弹刚体.velocity = Vector2.zero;
-
-        bool 拖尾存在 = (烟雾拖尾粒子 != null);
-        if (拖尾存在)
-            烟雾拖尾粒子.Stop();
-
-        gameObject.SetActive(false);
     }
 }
