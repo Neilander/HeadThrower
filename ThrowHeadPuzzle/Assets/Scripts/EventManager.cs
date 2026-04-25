@@ -9,8 +9,17 @@ using UnityEngine;
 /// </summary>
 public class EventManager : MonoBehaviour
 {
-    // ===================== 单例模式 =====================
     public static EventManager Instance;
+
+    [Section("事件管理器配置")]
+    [Tooltip("拖拽这里分配创建好的LevelDataSO文件,该文件管理所有传送位置数据")]
+    public LevelDataSO levelData; // 引用上面创建的关卡数据文件
+
+    [SerializeField]
+    private DeliverintSO 当前关卡值SO;
+
+    [Section("数据监听")]
+    public int 当前关卡ID = 1; // 示例数据监听，实际数据监听可根据需要自行添加
 
     // ===================== 核心字典：存储所有事件监听 =====================
     private Dictionary<string, Action> 事件监听字典 = new Dictionary<string, Action>();

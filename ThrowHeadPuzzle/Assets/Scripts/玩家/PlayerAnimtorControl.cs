@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerAnimtorControl : MonoBehaviour
 {
+    [Section("动画控制")]
     public Animator 玩家动画控制器;
 
     [SerializeField]

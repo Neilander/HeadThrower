@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class 相机中心点更新 : MonoBehaviour
 {
+    [Section("目标追踪")]
     public Transform 人物_身体;
+
+    [Section("目标追踪")]
     public Transform 人物_头;
 
     [SerializeField]

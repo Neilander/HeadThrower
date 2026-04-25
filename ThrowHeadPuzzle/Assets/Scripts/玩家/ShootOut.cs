@@ -2,10 +2,10 @@ using UnityEngine;
 
 public class ShootOut : MonoBehaviour
 {
-    [Header("子弹速度")]
+    [Section("弹道参数")]
     public float 子弹速度 = 15f;
 
-    [Header("自动回收时间（秒）")]
+    [Section("弹道参数")]
     public float 存活时间 = 1.5f;
 
     private Vector2 _发射方向;
@@ -27,13 +27,13 @@ public class ShootOut : MonoBehaviour
         _计时器 += Time.deltaTime;
         if (_计时器 >= 存活时间)
         {
-            BulletPool.Instance.回收子弹(gameObject);
+            BulletPool.Instance.回收子弹(gameObject, false); // 超时回收不播放特效
         }
     }
 
     // 碰撞后立刻回收
     private void OnTriggerEnter2D(Collider2D other)
     {
-        BulletPool.Instance.回收子弹(gameObject);
+        BulletPool.Instance.回收子弹(gameObject, true); // 碰撞回收播放特效
     }
 }

@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Head
   - Bullet
+  - Manager
   layers:
   - Default
   - TransparentFX

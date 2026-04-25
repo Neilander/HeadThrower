@@ -9965,7 +9965,6 @@ GameObject:
   - component: {fileID: 61374952899877022}
   - component: {fileID: 50614525472420450}
   - component: {fileID: 3698193744177700741}
-  - component: {fileID: 2606243884508425467}
   m_Layer: 3
   m_Name: KoalaGunBullet
   m_TagString: Bullet
@@ -9983,7 +9982,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 5.42, y: -1.546, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4034307314382222}
@@ -10005,10 +10004,10 @@ BoxCollider2D:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 503
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -10060,7 +10059,7 @@ Rigidbody2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   m_Interpolate: 1
   m_SleepingMode: 0
   m_CollisionDetection: 1
@@ -10075,18 +10074,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 11162d224c383d54295c3380bf56b9b6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &2606243884508425467
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1579859513670320}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 23bff4b91d593c740bd83e9c2af132a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1732689920048540
@@ -14944,6 +14931,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3adde9a221a18ba40af34954c2a15ede, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  "\u70DF\u96FE\u62D6\u5C3E\u7C92\u5B50": {fileID: 198699674202627632}
+  "\u51B2\u51FB\u7C92\u5B50": {fileID: 198161342189202992}
 --- !u!1 &1842713353332314
 GameObject:
   m_ObjectHideFlags: 0

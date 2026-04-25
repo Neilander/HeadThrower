@@ -13,13 +13,13 @@ public class 子弹命中反馈 : MonoBehaviour
     private const float 默认粒子缩放 = 1f;
 
     // ========== 核心配置（TopDown风格，无冗余） ==========
-    [Header("粒子配置")]
+    [Section("粒子配置")]
     public ParticleSystem 命中粒子;
     public float 粒子播放时长 = 默认粒子停止延时;
     public Vector3 粒子缩放 = new Vector3(默认粒子缩放, 默认粒子缩放, 默认粒子缩放);
     public bool 播放后销毁粒子 = false;
 
-    [Header("音效配置")]
+    [Section("音效配置")]
     public AudioClip[] 命中音效列表;
 
     [Range(0f, 1f)]

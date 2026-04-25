@@ -36,11 +36,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private Vector2 瞄准输入值;
 
-    [Header("基本参数")]
+    [Section("基本参数")]
     public float 速度;
     public float 跳跃高度;
 
-    [Header("物理")]
+    [Section("物理引用")]
     public CapsuleCollider2D capsuleCollider;
     public Rigidbody2D rgbody;
     public PhysicCheck physicCheck;
@@ -498,6 +498,7 @@ public class PlayerController : MonoBehaviour
         Debug.LogWarning($"没有找到tag为'Head'的子物体");
     }
 
+    [Section("投掷配置")]
     [SerializeField]
     int 反作用力;
 

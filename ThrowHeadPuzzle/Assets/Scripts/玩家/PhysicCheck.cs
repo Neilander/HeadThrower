@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class PhysicCheck : MonoBehaviour
 {
-    [Header("参数")]
+    [Section("检测参数")]
     public bool 手动修改边缘;
     public Vector2 检测偏移量;
     public Vector2 左墙偏移量;
@@ -14,7 +14,7 @@ public class PhysicCheck : MonoBehaviour
     public LayerMask 检测图层;
     private CapsuleCollider2D 胶囊组件;
 
-    [Header("状态")]
+    [Section("检测状态")]
     public bool isGround;
     public bool 是否撞左墙;
     public bool 是否撞右墙;

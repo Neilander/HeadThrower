@@ -15,24 +15,12 @@ public class PickUpHead : BaseInteraction
     private const float 缩放默认值 = 1f;
     private const KeyCode 交互按键 = KeyCode.E;
 
+    [Section("拾取设置")]
     public PlayerController playerController;
     public bool isPickUp;
     public DeliverBoolSO eventE;
 
-
-    void Update()
-    {
-        bool 按下交互键且满足拾取条件 =
-            Input.GetKeyDown(交互按键)
-            && playerController.curstate == PlayerController.ThrowState.NoHead
-            && playerController.CanPickUp()
-            && playerController._currentTrigger.transform == transform;
-        if (按下交互键且满足拾取条件)
-        {
-            OnInteract(new InteractionSignal(gameObject, InteractionType.KeyPress));
-        }
-    }
-
+    [Section("拾取设置")]
     [SerializeField] Vector3 头偏移量 = new Vector3(欧拉角默认值, 头部默认偏移Y, 欧拉角默认值);
     public override bool OnInteract(InteractionSignal signal)
     {

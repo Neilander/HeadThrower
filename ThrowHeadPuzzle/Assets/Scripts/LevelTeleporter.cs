@@ -7,26 +7,26 @@ public class LevelTeleporter : MonoBehaviour
     // 2) 将所有 if 控制流条件提取为上一行 bool 变量。
     // 3) 优先将可安全重命名的英文变量改为中文语义命名。
 
-    private const int 默认关卡编号 = 1;
+    //private const int 默认关卡编号 = 1;
 
     // ========== 在Unity编辑器中可设置的参数 ==========
-
+    [Section("传送设置")]
     [Tooltip("传送时的位置偏移量\n" + "例如：(0, 0.5, 0) 会在目标位置上方0.5单位传送")]
     public Vector3 positionOffset = Vector3.zero;
 
-    [Header("传送设置")]
     [Tooltip("要传送到的关卡编号（1,2,3...）")]
-    public int 目标关卡 = 默认关卡编号; // 这个传送门会传送到哪个关卡
+    public int 目标关卡 = 0; // 这个传送门会传送到哪个关卡
 
     [Tooltip("与传送门交互的按键")]
     public KeyCode interactKey = KeyCode.T; // 按哪个键进行传送
 
-    [Header("关卡数据")]
     [Tooltip("拖拽这里分配创建好的LevelDataSO文件")]
     public LevelDataSO levelData; // 引用上面创建的关卡数据文件
 
-    [Header("按键提示文件")]
     public DeliverBoolSO TSignBoolSO;
+
+    [SerializeField]
+    private DeliverintSO 当前关卡值SO;
 
     // ========== 私有变量（不在编辑器中显示） ==========
     private bool 玩家在传送范围内 = false; // 记录玩家是否在传送门范围内
@@ -65,6 +65,7 @@ public class LevelTeleporter : MonoBehaviour
         if (玩家在范围内且按下交互键)
         {
             TeleportToLevel(); // 执行传送
+            当前关卡值SO.触发事件(目标关卡); // 更新当前关卡值SO
         }
     }
 
@@ -121,11 +122,15 @@ public class LevelTeleporter : MonoBehaviour
                     if (找到默认头部拾取组件)
                     {
                         // 复用捡头逻辑：移除刚体 -> 设为玩家子对象 -> 还原局部位姿。
-                        InteractionSignal 头部拼接信号 = new InteractionSignal(玩家物体, InteractionType.KeyPress);
+                        InteractionSignal 头部拼接信号 = new InteractionSignal(
+                            玩家物体,
+                            InteractionType.KeyPress
+                        );
                         默认头部拾取组件.OnInteract(头部拼接信号);
 
                         // 利用状态机同步到“头在身上”状态，避免状态与层级不一致。
-                        bool 当前不是头在身上状态 = 玩家控制器.curstate != PlayerController.ThrowState.HeadOnBody;
+                        bool 当前不是头在身上状态 =
+                            玩家控制器.curstate != PlayerController.ThrowState.HeadOnBody;
                         if (当前不是头在身上状态)
                         {
                             玩家控制器.StartState(PlayerController.ThrowState.HeadOnBody);
@@ -141,7 +146,6 @@ public class LevelTeleporter : MonoBehaviour
                     Debug.LogWarning("PlayerController.默认头部 未配置，已跳过头部拼接");
                 }
             }
-
 
             // 将玩家传送到目标位置
             // 获取玩家当前的z坐标（保持原有深度）

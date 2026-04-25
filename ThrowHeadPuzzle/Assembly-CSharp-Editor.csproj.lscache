@@ -2,12 +2,10 @@ version=1
 
 # This file caches language service data to improve the performance of C# Dev Kit.
 # It is not intended for manual editing. It can safely be deleted and will be
-# regenerated automatically.
+# regenerated automatically. For more information, see https://aka.ms/lscache
 #
-# To exclude from version control, add *.lscache to your .gitignore file.
-#
-# To disable caching, add the following to your VS Code settings:
-#   "dotnet.projectsystem.enableLanguageServiceCache": false
+# To control where cache files are stored, use the following VS Code setting:
+#   "dotnet.projectsystem.cacheInProjectFolder": true
 
 [project]
 language=C#
@@ -53,23 +51,23 @@ TemporaryDependencyNodeTargetIdentifier=netstandard2.1
 /warnaserror+:NU1605
 
 [sourceFiles]
-Assets/
- GptRelated/Editor/ChatGPTEditor.cs
- M Studio/Colourful Hierarchy Category GameObject/Editor/
-  ColorPalette.cs
-  StyleHierarchy.cs
- MovingPlatformMaker2D/Scripts/Editor/
-  CircularPlatformControllerEditor.cs
-  Menu.cs
-  PathEditor.cs
-  PathEditorHelper.cs
-  PathLineDecoratorEditor.cs
- MovingPlatformMaker2D/Scripts/Tests/Editor/
-  EasingCurveMock.cs
-  PathDelegateTest.cs
- Scripts/Editor/
-  ItemDataEditor.cs
-  LevelDataEditorTool.cs
+Assets/M Studio/Colourful Hierarchy Category GameObject/Editor/
+ ColorPalette.cs
+ StyleHierarchy.cs
+Assets/MovingPlatformMaker2D/Scripts/Editor/
+ CircularPlatformControllerEditor.cs
+ Menu.cs
+ PathEditor.cs
+ PathEditorHelper.cs
+ PathLineDecoratorEditor.cs
+Assets/MovingPlatformMaker2D/Scripts/Tests/Editor/
+ EasingCurveMock.cs
+ PathDelegateTest.cs
+Assets/Scripts/Editor/
+ BaseGroupEditor.cs
+ EditorUIUtils.cs
+ ItemDataEditor.cs
+ LevelDataEditorTool.cs
 Temp/obj/Debug/Assembly-CSharp-Editor/.NETStandard,Version=v2.1.AssemblyAttributes.cs
 
 [metadataReferences]
@@ -382,7 +380,7 @@ Temp/bin/Debug/Assembly-CSharp.dll
 ../../../../../../Program Files/Unity/Hub/Editor/2022.3.17f1c1/Editor/Data/Tools/Unity.SourceGenerators/
  Unity.Properties.SourceGenerator.dll
  Unity.SourceGenerators.dll
-../../../../.vscode/extensions/visualstudiotoolsforunity.vstuc-1.2.1/Analyzers/Microsoft.Unity.Analyzers.dll
+../../../../.vscode/extensions/visualstudiotoolsforunity.vstuc-1.2.2/Analyzers/Microsoft.Unity.Analyzers.dll
 
 [analyzerConfigFiles]
 Temp/obj/Debug/Assembly-CSharp-Editor/Assembly-CSharp-Editor.GeneratedMSBuildEditorConfig.editorconfig
