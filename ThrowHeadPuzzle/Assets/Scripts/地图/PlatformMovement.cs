@@ -1,143 +1,124 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class PlatformMovement : BaseInteraction
 {
-    private WorldMover mover;
+    #region 常量定义
+    private const float 最小移动阈值 = 0.0001f;
+    #endregion
+
+    [Section("引用组件", "#FF9800")]
+    private WorldMover _移动器;
+    private Transform _玩家变换组件;
+
+    [Section("路径坐标", "#00BCD4")]
+    [SerializeField]
+    private Transform 路径点1;
 
     [SerializeField]
-    private bool isMoving = false;
+    private Transform 路径点2;
+
+    [Section("状态监控", "#9C27B0")]
+    [SerializeField]
+    private bool _玩家是否在平台上 = false;
 
     [SerializeField]
-    private Transform playerTransform;
+    private bool _当前位于点1 = true;
 
-    [SerializeField]
-    private bool playerOnPlatform = false;
+    [Section("交互事件资产", "#E91E63")]
+    public DeliverBoolSO 提示框显示事件SO;
+    public DeliverTransformSO 提示框位置SO;
 
-    [SerializeField]
-    public DeliverBoolSO QsignboolSO;
-
-    public DeliverTransformSO QsignSO;
-    //public Transform Qsign;
-
-    [SerializeField]
-    private Transform pos1;
-
-    [SerializeField]
-    private Transform pos2;
-
-    private bool isPos1 = true;
-    private Vector3 lastPlatformPosition; // 记录平台上一帧的位置
+    private Vector3 _上一帧平台位置;
 
     private void Awake()
     {
-        mover = GetComponent<WorldMover>();
+        _移动器 = GetComponent<WorldMover>();
     }
 
-    private void OnEnable()
+    private void Start()
     {
-        // // 尝试在未触发事件时读取最新的 Transform 值
-        // Transform receivedTransform = QsignSO.GetLatestTransform();
-        // if (receivedTransform != null)
-        // {
-        //     HandleTransformReceived(receivedTransform);
-        // }
-        // else
-        // {
-        //     // 如果还未存储 Transform 值，订阅事件
-        //     QsignSO._transform += HandleTransformReceived;
-        // }
-        // // // 订阅 _transform 事件
-        // // QsignSO._transform += HandleTransformReceived;
-    }
-
-    private void OnDisable()
-    {
-        // 取消订阅 _transform 事件，防止内存泄漏
-        //QsignSO._transform -= HandleTransformReceived;
-    }
-
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            playerOnPlatform = true;
-            playerTransform = other.transform;
-            QsignboolSO.RaiseEvent(true);
-        }
-    }
-
-    private void OnTriggerExit2D(Collider2D other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            //Qsign.GetComponent<SpriteRenderer>().enabled = false;
-
-            playerOnPlatform = false;
-            playerTransform = null;
-            isMoving = false;
-            QsignboolSO.RaiseEvent(false);
-        }
-    }
-
-    private void OnTriggerStay2D(Collider2D other)
-    {
-        if (other.CompareTag("Player")) { }
+        // 初始化记录位置
+        _上一帧平台位置 = transform.position;
     }
 
     private void Update()
     {
-        float platformXMovement = transform.position.x - lastPlatformPosition.x;
-        if (playerOnPlatform)
+        // 1. 处理交互按键
+        bool 具备交互条件 = _玩家是否在平台上 && _玩家变换组件 != null;
+        if (具备交互条件)
         {
-            if (playerTransform != null)
+            bool 玩家按下Q键 = Input.GetKeyDown(KeyCode.Q);
+            if (玩家按下Q键)
             {
-                if (Input.GetKeyDown(KeyCode.Q))
-                {
-                    isMoving = true;
-                    OnInteract(new InteractionSignal(gameObject, InteractionType.KeyPress));
-                }
-
-                // 让玩家跟随平台移动
-                playerTransform.position = new Vector3(
-                    playerTransform.position.x + platformXMovement,
-                    playerTransform.position.y,
-                    playerTransform.position.z
-                );
+                OnInteract(new InteractionSignal(gameObject, InteractionType.KeyPress));
             }
         }
-        // 更新平台上一帧的位置
-        lastPlatformPosition = transform.position;
     }
 
     /// <summary>
-    /// 在这里处理接收到的 Transform 值
+    /// 核心逻辑：使用 LateUpdate 解决滞后，并手动同步位移规避缩放问题
     /// </summary>
-    /// <param name="receivedTransform"></param>
-    private void HandleTransformReceived(Transform receivedTransform)
+    private void LateUpdate()
     {
-        Debug.Log("Received Transform: " + receivedTransform.name);
-        // 在这里进行其他操作
-        //Qsign = receivedTransform;
+        Vector3 当前时刻平台位置 = transform.position;
+
+        // 计算本帧平台在世界空间产生的位移差
+        Vector3 平台位移矢量 = 当前时刻平台位置 - _上一帧平台位置;
+
+        // 提取判断条件
+        bool 平台产生了实质移动 = 平台位移矢量.sqrMagnitude > 最小移动阈值;
+        bool 需要带动玩家移动 = 平台产生了实质移动 && _玩家是否在平台上 && _玩家变换组件 != null;
+
+        if (需要带动玩家移动)
+        {
+            // 【关键改进】：直接修改世界坐标，不建立父子关系，不继承缩放
+            _玩家变换组件.position += 平台位移矢量;
+        }
+
+        // 记录本帧结束时的位置，供下一帧对比
+        _上一帧平台位置 = 当前时刻平台位置;
     }
 
-    public override bool OnInteract(InteractionSignal signal)
+    private void OnTriggerEnter2D(Collider2D 碰撞体)
     {
-        //Qsign.GetComponent<SpriteRenderer>().enabled = false;
-
-        if (signal.type != InteractionType.KeyPress)
-            return false;
-        if (isPos1)
+        bool 碰撞对象是玩家 = 碰撞体.CompareTag("Player");
+        if (碰撞对象是玩家)
         {
-            mover.MoveTo(pos2.position);
+            _玩家是否在平台上 = true;
+            _玩家变换组件 = 碰撞体.transform;
+
+            // 禁止使用 SetParent，解决缩放变形 Bug
+            提示框显示事件SO.RaiseEvent(true);
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D 碰撞体)
+    {
+        bool 碰撞对象是玩家 = 碰撞体.CompareTag("Player");
+        if (碰撞对象是玩家)
+        {
+            _玩家是否在平台上 = false;
+            _玩家变换组件 = null;
+            提示框显示事件SO.RaiseEvent(false);
+        }
+    }
+
+    public override bool OnInteract(InteractionSignal 信号)
+    {
+        bool 信号类型不符 = 信号.type != InteractionType.KeyPress;
+        if (信号类型不符)
+            return false;
+
+        if (_当前位于点1)
+        {
+            _移动器.移动至(路径点2.position);
         }
         else
         {
-            mover.MoveTo(pos1.position);
+            _移动器.移动至(路径点1.position);
         }
-        isPos1 = !isPos1;
+
+        _当前位于点1 = !_当前位于点1;
         return true;
     }
 }

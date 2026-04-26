@@ -1,76 +1,78 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class WorldMover : MonoBehaviour
 {
-    [Header("moveModule")]
-    public float moveDuration = 1.0f;
-    public AnimationCurve moveCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
+    #region 常量定义
+    private const float 初始时间 = 0f;
+    private const float 完成进度 = 1.0f;
+    #endregion
 
-    public List<UnityEvent> onMoveReachs;
-    public int triggerIndex = 0;
+    [Section("移动模块配置", "#4CAF50")]
+    public float 移动时长 = 1.0f;
+    public AnimationCurve 移动曲线 = AnimationCurve.EaseInOut(0, 0, 1, 1);
 
-    private bool isMoving = false;
-    private Vector3 startPosition;
-    private Vector3 targetPosition;
-    private float elapsedTime = 0;
+    [Section("事件触发控制", "#2196F3")]
+    public List<UnityEvent> 到达目的地触发事件;
+    public int 当前事件索引 = 0;
 
-    void Update()
+    private bool _是否正在移动 = false;
+    private Vector3 _起始位置;
+    private Vector3 _目标位置;
+    private float _已流逝时间 = 0;
+
+    private void Update()
     {
-        if (isMoving)
+        bool 处于移动状态 = _是否正在移动;
+        if (处于移动状态)
         {
-            MoveTowardsTarget();
+            执行平滑移动();
         }
     }
 
     /// <summary>
     /// 开始平滑移动到指定位置
     /// </summary>
-    /// <param name="destination">3D世界相对位置</param>
-    public void MoveTo(Vector3 destination, int i = 0)
+    public void 移动至(Vector3 目的地坐标, int 关联事件索引 = 0)
     {
-        startPosition = transform.position;
-        targetPosition = destination;
-        elapsedTime = 0;
-        isMoving = true;
-        triggerIndex = i;
+        _起始位置 = transform.position;
+        _目标位置 = 目的地坐标;
+        _已流逝时间 = 初始时间;
+        _是否正在移动 = true;
+        当前事件索引 = 关联事件索引;
     }
 
-    /// <summary>
-    /// 开始平滑移动到指定位置 (可自定义曲线和时长)
-    /// </summary>
-    public void MoveTo(Vector3 destination, AnimationCurve newCurve, float newT, int i = 0)
+    private void 执行平滑移动()
     {
-        startPosition = transform.position;
-        targetPosition = destination;
-        elapsedTime = 0;
-        isMoving = true;
-        moveCurve = newCurve;
-        moveDuration = newT;
-        triggerIndex = i;
-    }
+        bool 移动未结束 = _是否正在移动;
+        if (!移动未结束)
+            return;
 
-    /// <summary>
-    /// 实际移动逻辑
-    /// </summary>
-    private void MoveTowardsTarget()
-    {
-        if (!isMoving) return;
+        _已流逝时间 += Time.deltaTime;
+        float 移动进度 = Mathf.Clamp01(_已流逝时间 / 移动时长);
+        float 曲线插值 = 移动曲线.Evaluate(移动进度);
 
-        elapsedTime += Time.deltaTime;
-        float t = Mathf.Clamp01(elapsedTime / moveDuration);
-        float curveValue = moveCurve.Evaluate(t);
+        transform.position = Vector3.Lerp(_起始位置, _目标位置, 曲线插值);
 
-        transform.position = Vector3.Lerp(startPosition, targetPosition, curveValue);
-
-        if (t >= 1.0f)
+        bool 已到达终点 = 移动进度 >= 完成进度;
+        if (已到达终点)
         {
-            transform.position = targetPosition;
-            isMoving = false;
-            if (onMoveReachs != null && triggerIndex >= 0 && triggerIndex < onMoveReachs.Count)
-                onMoveReachs[triggerIndex]?.Invoke();
+            完成移动过程();
+        }
+    }
+
+    private void 完成移动过程()
+    {
+        transform.position = _目标位置;
+        _是否正在移动 = false;
+
+        bool 事件列表有效 = 到达目的地触发事件 != null;
+        bool 索引在范围内 = 当前事件索引 >= 0 && 当前事件索引 < 到达目的地触发事件.Count;
+
+        if (事件列表有效 && 索引在范围内)
+        {
+            到达目的地触发事件[当前事件索引]?.Invoke();
         }
     }
 }

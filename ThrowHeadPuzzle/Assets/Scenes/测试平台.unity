@@ -2852,6 +2852,7 @@ GameObject:
   - component: {fileID: 461156344}
   - component: {fileID: 461156343}
   - component: {fileID: 461156345}
+  - component: {fileID: 461156346}
   m_Layer: 0
   m_Name: "\u76F8\u673A\u4E2D\u5FC3\u70B9"
   m_TagString: Untagged
@@ -2866,14 +2867,16 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 461156342}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9a474e10d916cc54d9269d310d88b665, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  "\u4EBA\u7269_\u8EAB\u4F53": {fileID: 1390444222}
-  "\u4EBA\u7269_\u5934": {fileID: 664284584}
-  Pos_Cam: {x: 0, y: 0, z: 0}
+  "\u4EBA\u7269\u8EAB\u4F53": {fileID: 1390444222}
+  "\u4EBA\u7269\u5934\u90E8": {fileID: 664284584}
+  "\u76F8\u673AZ\u6DF1\u5EA6": -10
+  "\u542F\u7528\u5E73\u6ED1\u8DDF\u968F": 1
+  "\u5E73\u6ED1\u8DDF\u968F\u901F\u5EA6": 10
 --- !u!4 &461156344
 Transform:
   m_ObjectHideFlags: 0
@@ -2883,7 +2886,7 @@ Transform:
   m_GameObject: {fileID: 461156342}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 31.49, y: 6, z: -0.0552247}
+  m_LocalPosition: {x: 3.64, y: 1.8698274, z: 0.036886882}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2941,6 +2944,28 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &461156346
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 461156342}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5eb80d8e62d9d145bb50fb783c0f731, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_PositionMode: 0
+  m_RotationMode: 0
+  m_UpdateMethod: 2
+  m_Targets:
+  - target: {fileID: 1390444222}
+    weight: 1
+    radius: 1
+  - target: {fileID: 664284584}
+    weight: 1
+    radius: 1
 --- !u!1 &476385654
 GameObject:
   m_ObjectHideFlags: 0
@@ -4720,7 +4745,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 1.53125
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -4745,7 +4770,7 @@ Transform:
   m_GameObject: {fileID: 883912074}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 31.49, y: 6, z: -10.055224}
+  m_LocalPosition: {x: 3.6399999, y: 2.025, z: -10.963113}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5899,7 +5924,7 @@ Transform:
   m_GameObject: {fileID: 1418689545}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 31.49, y: 6, z: -10.055224}
+  m_LocalPosition: {x: 3.6399999, y: 2.025, z: -10.963113}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -5925,20 +5950,16 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1418689545}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a5bb9e892b8a40345a2e752bda72ec4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  virtualCamera: {fileID: 1418689546}
-  "\u4EBA\u7269_\u8EAB\u4F53": {fileID: 1390444222}
-  adjustmentSpeed: 30.1
-  maxOrthoSize: 8
-  minOrthoSize: 6
-  changeVelocity: 0
-  smoothTime: 0.05
-  edgeThreshold: 0.3
-  minedgeThreshold: 0.2
+  autoFramingMode: 2
+  zoomSensitivity: 2
+  minOrthoSize: 3
+  maxOrthoSize: 20
+  resetKey: 122
 --- !u!1 &1454581303
 GameObject:
   m_ObjectHideFlags: 0
@@ -6542,6 +6563,7 @@ MonoBehaviour:
   "\u6700\u77ED\u4FDD\u7559\u65F6\u95F4": 3
   "\u9884\u70ED\u6570\u91CF": 20
   "\u6700\u5927\u95F2\u7F6E\u6570\u91CF": 20
+  "\u542F\u7528\u65E5\u5FD7": 0
 --- !u!1 &1775876081
 GameObject:
   m_ObjectHideFlags: 0
@@ -6692,8 +6714,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d20ea30002a3f54ab03f111ed53c2e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveDuration: 0.2
-  moveCurve:
+  "\u79FB\u52A8\u65F6\u957F": 1
+  "\u79FB\u52A8\u66F2\u7EBF":
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
@@ -6717,8 +6739,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  onMoveReachs: []
-  triggerIndex: 0
+  "\u5230\u8FBE\u76EE\u7684\u5730\u89E6\u53D1\u4E8B\u4EF6": []
+  "\u5F53\u524D\u4E8B\u4EF6\u7D22\u5F15": 0
 --- !u!114 &2021614794
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6732,9 +6754,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   linkedInteractions: []
-  pos1: {fileID: 1009150603}
-  pos2: {fileID: 1414252398}
-  Qsign: {fileID: 895383524}
+  "\u4F4D\u7F6E1": {fileID: 0}
+  "\u4F4D\u7F6E2": {fileID: 0}
+  "\u6309\u952E\u63D0\u793A\u7269\u4F53": {fileID: 0}
 --- !u!61 &2021614795
 BoxCollider2D:
   m_ObjectHideFlags: 0

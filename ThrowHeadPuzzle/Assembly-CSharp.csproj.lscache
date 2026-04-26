@@ -74,9 +74,9 @@ Assets/MovingPlatformMaker2D/Scripts/
   PathType.cs
  Utils.cs
 Assets/Scripts/
- AdjustCamera.cs
  BaseInteraction.cs
  BulletHitFeedback.cs
+ CameraZoomController.cs
  Datas/ItemFactory.cs
  DeepseekRespon.cs
  EventManager.cs

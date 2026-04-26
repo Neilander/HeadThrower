@@ -21,6 +21,10 @@ public sealed class MuzzleFlareController : MonoBehaviour
     [SerializeField]
     private int 最大闲置数量 = 20;
 
+    [Section("调试配置")]
+    [SerializeField]
+    private bool 启用日志 = true;
+
     // 对象池容器
     private readonly Queue<GameObject> 闲置池 = new Queue<GameObject>();
 
@@ -63,12 +67,37 @@ public sealed class MuzzleFlareController : MonoBehaviour
         // 播放粒子特效
         播放粒子特效(弹壳实例);
 
-        // 调试日志
-        Debug.Log($"<color=green>播放弹壳特效 - 激活对象数: {激活对象列表.Count}</color>");
+        // 输出调试日志
+        输出日志($"<color=green>播放弹壳特效 - 激活对象数: {激活对象列表.Count}</color>");
     }
 
     // 对外接口：停止所有特效
-    public void StopAll() { }
+    public void StopAll()
+    {
+        // 检查是否有激活对象
+        bool 有激活对象 = 激活对象列表.Count > 0;
+
+        if (有激活对象)
+        {
+            // 倒序遍历激活列表，回收所有对象
+            for (int i = 激活对象列表.Count - 1; i >= 0; i--)
+            {
+                GameObject 激活对象 = 激活对象列表[i];
+
+                // 回收该对象
+                回收实例(激活对象);
+
+                // 从激活列表中移除
+                激活对象列表.RemoveAt(i);
+
+                // 从时间记录中移除
+                激活时间记录.Remove(激活对象);
+            }
+
+            // 输出调试日志
+            输出日志($"<color=yellow>StopAll: 已停止并回收所有激活的弹壳特效</color>");
+        }
+    }
 
     // 初始化对象池
     private void 初始化池()
@@ -83,7 +112,7 @@ public sealed class MuzzleFlareController : MonoBehaviour
             闲置池.Enqueue(预热实例);
         }
 
-        Debug.Log($"<color=cyan>弹壳对象池初始化完成，预热数量: {预热数量常量}</color>");
+        输出日志($"<color=cyan>弹壳对象池初始化完成，预热数量: {预热数量常量}</color>");
     }
 
     // 从池里拿实例，没有就新建
@@ -191,5 +220,51 @@ public sealed class MuzzleFlareController : MonoBehaviour
     }
 
     // 销毁所有实例
-    private void 清空所有实例() { }
+    private void 清空所有实例()
+    {
+        // 先停止所有激活的特效
+        StopAll();
+
+        // 检查闲置池是否有对象
+        bool 闲置池非空 = 闲置池.Count > 0;
+
+        if (闲置池非空)
+        {
+            // 将闲置池转换为数组，避免在遍历时修改队列
+            GameObject[] 闲置对象数组 = 闲置池.ToArray();
+
+            // 遍历并销毁所有闲置对象
+            foreach (GameObject 闲置对象 in 闲置对象数组)
+            {
+                Destroy(闲置对象);
+            }
+
+            // 清空闲置池
+            闲置池.Clear();
+
+            // 输出调试日志
+            输出日志($"<color=red>清空所有实例: 已销毁 {闲置对象数组.Length} 个闲置对象</color>");
+        }
+
+        // 清空所有数据结构
+        激活对象列表.Clear();
+        激活时间记录.Clear();
+
+        // 输出最终状态
+        输出日志(
+            $"<color=magenta>资源清理完成 - 闲置池: {闲置池.Count}, 激活列表: {激活对象列表.Count}, 时间记录: {激活时间记录.Count}</color>"
+        );
+    }
+
+    // 封装Debug.Log，受启用日志开关控制
+    private void 输出日志(string 消息内容)
+    {
+        // 检查是否启用日志
+        bool 日志已启用 = 启用日志;
+
+        if (日志已启用)
+        {
+            Debug.Log(消息内容);
+        }
+    }
 }
