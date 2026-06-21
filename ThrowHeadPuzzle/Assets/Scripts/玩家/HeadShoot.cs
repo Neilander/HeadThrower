@@ -1,5 +1,13 @@
 using UnityEngine;
 
+public enum ShakeIntensity
+{
+    轻微 = 1,
+    适中 = 5,
+    剧烈 = 10,
+    爆裂 = 20,
+}
+
 public class HeadShoot : BaseInteraction
 {
     private const float 零值 = 0f;
@@ -34,9 +42,16 @@ public class HeadShoot : BaseInteraction
     [SerializeField]
     private ParticleSystem 枪口火焰特效;
 
+    [SerializeField]
+    private ShakeIntensity 震动等级;
+
     [Section(特效设置分组名称)]
     [SerializeField]
     private MuzzleFlareController 弹壳特效控制器;
+
+    [Section(特效设置分组名称)]
+    [SerializeField]
+    private GunGlowFeedback 枪械发光反馈;
 
     private Vector2 枪械朝向;
 
@@ -47,6 +62,9 @@ public class HeadShoot : BaseInteraction
         {
             头部拾取组件 = GetComponent<PickUpHead>();
         }
+
+        if (枪械发光反馈 == null)
+            枪械发光反馈 = GetComponent<GunGlowFeedback>();
     }
 
     private void Update()
@@ -64,11 +82,17 @@ public class HeadShoot : BaseInteraction
         if (尝试射击)
         {
             处理持续射击输入();
+            屏幕震动();
         }
         else
         {
             重置枪械旋转();
         }
+    }
+
+    private void 屏幕震动()
+    {
+        CameraShakeManager.实例.触发震动((float)震动等级 / 100f);
     }
 
     public override bool OnInteract(InteractionSignal 交互信号)
@@ -102,6 +126,10 @@ public class HeadShoot : BaseInteraction
 
         传递子弹射出方向(子弹);
         播放弹壳特效();
+
+        // 触发枪械发光反馈的发射闪光
+        if (枪械发光反馈 != null)
+            枪械发光反馈.触发发射闪光();
 
         return true;
     }
@@ -169,5 +197,10 @@ public class HeadShoot : BaseInteraction
     private void 播放弹壳特效()
     {
         弹壳特效控制器.Play();
+    }
+
+    public GunGlowFeedback 获取枪械发光反馈()
+    {
+        return 枪械发光反馈;
     }
 }

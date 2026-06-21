@@ -15,7 +15,7 @@ public class CameraZoomController : MonoBehaviour
 
     [Section("手动模式设置")]
     public float zoomSensitivity = 2f;
-    public float minOrthoSize = 3f;
+    public float minOrthoSize = 7f;
     public float maxOrthoSize = 20f;
     public KeyCode resetKey = KeyCode.Space; // 按空格恢复自动
 

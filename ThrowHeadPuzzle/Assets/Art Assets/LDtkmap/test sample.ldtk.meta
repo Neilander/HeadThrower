@@ -19,9 +19,13 @@ ScriptedImporter:
   _createLevelBoundsTrigger: 0
   _useParallax: 1
   _intGridValues:
-  - _key: Groudmap_1
+  - _key: Art_tile_1
     _asset: {fileID: 11400000, guid: f64c74d042347e54780fe18288594ba1, type: 2}
-  - _key: Groudmap_2
+  - _key: Art_tile_2
+    _asset: {instanceID: 0}
+  - _key: Art_tile_3
+    _asset: {instanceID: 0}
+  - _key: Art_tile_4
     _asset: {instanceID: 0}
   _entities:
   - _key: NPCtest
