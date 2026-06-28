@@ -4,11 +4,14 @@ public class PlatformMovement : BaseInteraction
 {
     #region 常量定义
     private const float 最小移动阈值 = 0.0001f;
-    #endregion
 
     [Section("引用组件", "#FF9800")]
     private WorldMover _移动器;
     private Transform _玩家变换组件;
+    private Transform _玩家根物体;
+    private Rigidbody2D _玩家刚体; // 用于物理移动（问题3）
+
+    private Quaternion _上一帧平台旋转; // 记录上一帧旋转，用于旋转同步（问题4）
 
     [Section("路径坐标", "#00BCD4")]
     [SerializeField]
@@ -20,6 +23,7 @@ public class PlatformMovement : BaseInteraction
     [Section("状态监控", "#9C27B0")]
     [SerializeField]
     private bool _玩家是否在平台上 = false;
+    private Vector3 _玩家基础世界缩放;
 
     [SerializeField]
     private bool _当前位于点1 = true;
@@ -28,7 +32,11 @@ public class PlatformMovement : BaseInteraction
     public DeliverBoolSO 提示框显示事件SO;
     public DeliverTransformSO 提示框位置SO;
 
+    [SerializeField]
+    private Transform _备用父物体; // 离开平台后要附着的目标父物体
+
     private Vector3 _上一帧平台位置;
+    #endregion
 
     private void Awake()
     {
@@ -37,14 +45,16 @@ public class PlatformMovement : BaseInteraction
 
     private void Start()
     {
-        // 初始化记录位置
-        _上一帧平台位置 = transform.position;
+        GameObject 目标父物体 = GameObject.Find("人物相关父类");
+        if (目标父物体 != null)
+            _备用父物体 = 目标父物体.transform;
     }
 
     private void Update()
     {
         // 1. 处理交互按键
-        bool 具备交互条件 = _玩家是否在平台上 && _玩家变换组件 != null;
+        // bool 具备交互条件 = _玩家是否在平台上 && _玩家变换组件 != null;
+        bool 具备交互条件 = _玩家是否在平台上 && _玩家根物体 != null;
         if (具备交互条件)
         {
             bool 玩家按下Q键 = Input.GetKeyDown(KeyCode.Q);
@@ -55,52 +65,88 @@ public class PlatformMovement : BaseInteraction
         }
     }
 
-    /// <summary>
-    /// 核心逻辑：使用 LateUpdate 解决滞后，并手动同步位移规避缩放问题
-    /// </summary>
+    private void OnDisable()
+    {
+        if (_玩家根物体 != null && _玩家是否在平台上)
+        {
+            // 尝试将玩家移出，如果平台已销毁，直接设为 null 父级
+            Transform 新父 = _备用父物体 != null ? _备用父物体 : null;
+            try
+            {
+                _玩家根物体.SetParent(新父, worldPositionStays: true);
+            }
+            catch
+            {
+                // 若仍出错，忽略（极端情况）
+            }
+            _玩家是否在平台上 = false;
+            _玩家根物体 = null;
+            _玩家刚体 = null;
+        }
+    }
+
     private void LateUpdate()
     {
-        Vector3 当前时刻平台位置 = transform.position;
+        if (!_玩家是否在平台上 || _玩家根物体 == null)
+            return;
 
-        // 计算本帧平台在世界空间产生的位移差
-        Vector3 平台位移矢量 = 当前时刻平台位置 - _上一帧平台位置;
+        // 获取当前朝向符号（由 PlayerController 控制，只改变符号）
+        float 朝向符号 = Mathf.Sign(_玩家根物体.localScale.x);
+        if (朝向符号 == 0)
+            朝向符号 = 1f; // 安全兜底
 
-        // 提取判断条件
-        bool 平台产生了实质移动 = 平台位移矢量.sqrMagnitude > 最小移动阈值;
-        bool 需要带动玩家移动 = 平台产生了实质移动 && _玩家是否在平台上 && _玩家变换组件 != null;
+        // 计算补偿缩放（保持世界缩放不变）
+        Vector3 平台缩放 = transform.lossyScale;
+        Vector3 目标缩放 = new Vector3(
+            _玩家基础世界缩放.x / 平台缩放.x,
+            _玩家基础世界缩放.y / 平台缩放.y,
+            _玩家基础世界缩放.z / 平台缩放.z
+        );
 
-        if (需要带动玩家移动)
-        {
-            // 【关键改进】：直接修改世界坐标，不建立父子关系，不继承缩放
-            _玩家变换组件.position += 平台位移矢量;
-        }
+        // 应用朝向符号（只改变 X 的正负，保留幅度）
+        目标缩放.x *= 朝向符号;
 
-        // 记录本帧结束时的位置，供下一帧对比
-        _上一帧平台位置 = 当前时刻平台位置;
+        _玩家根物体.localScale = 目标缩放;
     }
 
     private void OnTriggerEnter2D(Collider2D 碰撞体)
     {
-        bool 碰撞对象是玩家 = 碰撞体.CompareTag("Player");
-        if (碰撞对象是玩家)
-        {
-            _玩家是否在平台上 = true;
-            _玩家变换组件 = 碰撞体.transform;
+        bool 碰撞对象不是玩家 = !碰撞体.CompareTag("Player");
+        if (碰撞对象不是玩家)
+            return; // 早退，简化代码
 
-            // 禁止使用 SetParent，解决缩放变形 Bug
-            提示框显示事件SO.RaiseEvent(true);
-        }
+        Transform 玩家根 = 碰撞体.transform;
+        _玩家是否在平台上 = true;
+        _玩家根物体 = 玩家根;
+        _玩家刚体 = 玩家根.GetComponent<Rigidbody2D>();
+
+        _玩家基础世界缩放 = 玩家根.lossyScale;
+
+        // 将玩家设为平台子物体（位置旋转自动跟随）
+        玩家根.SetParent(transform, worldPositionStays: true);
+
+        提示框显示事件SO.RaiseEvent(true);
     }
 
     private void OnTriggerExit2D(Collider2D 碰撞体)
     {
-        bool 碰撞对象是玩家 = 碰撞体.CompareTag("Player");
-        if (碰撞对象是玩家)
+        bool 碰撞对象不是玩家 = !碰撞体.CompareTag("Player");
+        if (碰撞对象不是玩家)
+            return;
+        if (_玩家根物体 != null)
         {
-            _玩家是否在平台上 = false;
-            _玩家变换组件 = null;
-            提示框显示事件SO.RaiseEvent(false);
+            bool 在平台仍处于激活状态 = gameObject.activeInHierarchy;
+            if (在平台仍处于激活状态)
+            {
+                Transform 新父 = _备用父物体 != null ? _备用父物体 : null;
+                _玩家根物体.SetParent(新父, worldPositionStays: true);
+            }
         }
+
+        _玩家是否在平台上 = false;
+        _玩家根物体 = null;
+        _玩家刚体 = null;
+        提示框显示事件SO.RaiseEvent(false);
     }
 
     public override bool OnInteract(InteractionSignal 信号)

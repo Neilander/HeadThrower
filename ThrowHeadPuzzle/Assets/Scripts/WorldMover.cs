@@ -22,7 +22,7 @@ public class WorldMover : MonoBehaviour
     private Vector3 _目标位置;
     private float _已流逝时间 = 0;
 
-    private void Update()
+    private void FixedUpdate()
     {
         bool 处于移动状态 = _是否正在移动;
         if (处于移动状态)

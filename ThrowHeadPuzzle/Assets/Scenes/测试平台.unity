@@ -6091,7 +6091,7 @@ GameObject:
   m_Layer: 0
   m_Name: "\u4EBA\u7269\u76F8\u5173\u7236\u7C7B"
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 2800000, guid: ac3cc7e8c14f323488c0c05f9b0c5013, type: 3}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
